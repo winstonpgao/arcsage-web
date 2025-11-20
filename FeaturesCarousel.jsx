@@ -186,6 +186,8 @@ const FeaturesCarousel = ({ features }) => {
                             e.stopPropagation();
                             setCurrentIndex(idx);
                         }}
+                        onMouseEnter={() => setIsPaused(true)}
+                        onMouseLeave={() => setIsPaused(false)}
                         style={{
                             width: '30px',
                             height: '30px',
