@@ -4,8 +4,9 @@ import { motion } from 'framer-motion';
 const Section = ({ id, title, subtitle, children, background = "white", theme = "light", image = null, imagePosition = "right" }) => {
     const isDark = theme === "dark";
     const isGray = background === "gray";
+    const isTransparent = background === "transparent";
 
-    const bgColor = isDark ? "var(--color-background-dark)" : (isGray ? "var(--color-background)" : "var(--color-surface)");
+    const bgColor = isTransparent ? "transparent" : (isDark ? "var(--color-background-dark)" : (isGray ? "var(--color-background)" : "var(--color-surface)"));
     const textColor = isDark ? "var(--color-text-primary-dark)" : "var(--color-text-primary)";
     const subTextColor = isDark ? "var(--color-text-secondary-dark)" : "var(--color-text-secondary)";
 
