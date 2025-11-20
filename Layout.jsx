@@ -83,7 +83,7 @@ const Layout = ({ children }) => {
                     }}>
                         <p>&copy; {new Date().getFullYear()} ArcSage. All rights reserved.</p>
                         <div style={{ display: 'flex', gap: '24px' }}>
-                            <a href="#" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Privacy Policy</a>
+                            <a href="https://privacy.arcsage.com.au/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Privacy Policy</a>
                             <a href="#" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}>Terms of Service</a>
                         </div>
                     </div>
