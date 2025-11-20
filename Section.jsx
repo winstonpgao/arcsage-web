@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Section = ({ id, title, subtitle, children, background = "white", theme = "light", image = null, imagePosition = "right" }) => {
+const Section = ({ id, title, subtitle, children, background = "white", theme = "light", image = null, imagePosition = "right", enableAnimation = true }) => {
     const isDark = theme === "dark";
     const isGray = background === "gray";
     const isTransparent = background === "transparent";
@@ -45,25 +45,29 @@ const Section = ({ id, title, subtitle, children, background = "white", theme = 
                             {subtitle && <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} style={{ fontSize: '21px', lineHeight: '1.5', color: subTextColor, marginBottom: image ? '32px' : '0' }}>{subtitle}</motion.p>}
                         </motion.div>
 
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: {
-                                    opacity: 1,
-                                    y: 0,
-                                    transition: {
-                                        duration: 0.6,
-                                        delay: 0.2,
-                                        staggerChildren: 0.1
+                        {enableAnimation ? (
+                            <motion.div
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                variants={{
+                                    hidden: { opacity: 0, y: 20 },
+                                    visible: {
+                                        opacity: 1,
+                                        y: 0,
+                                        transition: {
+                                            duration: 0.6,
+                                            delay: 0.2,
+                                            staggerChildren: 0.1
+                                        }
                                     }
-                                }
-                            }}
-                        >
-                            {children}
-                        </motion.div>
+                                }}
+                            >
+                                {children}
+                            </motion.div>
+                        ) : (
+                            <div>{children}</div>
+                        )}
                     </div>
 
                     {image && (

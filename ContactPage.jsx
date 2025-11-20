@@ -7,7 +7,7 @@ const ContactPage = () => {
     return (
         <Layout>
             <div style={{ paddingTop: '120px', minHeight: '100vh' }}>
-                <Section id="contact-hero" background="transparent">
+                <Section id="contact-hero" background="transparent" enableAnimation={false}>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
