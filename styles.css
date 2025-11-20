@@ -147,6 +147,20 @@ p {
    MOBILE & TABLET RESPONSIVE STYLES
    ============================================ */
 
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .section-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
 /* Carousel Responsive Styles */
 .carousel-container {
   position: relative;

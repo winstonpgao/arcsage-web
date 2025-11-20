@@ -17,12 +17,7 @@ const Section = ({ id, title, subtitle, children, background = "white", theme = 
             borderTop: isDark ? "none" : "1px solid var(--color-border)"
         }}>
             <div className="container">
-                <div style={{
-                    display: image ? 'grid' : 'block',
-                    gridTemplateColumns: image ? '1fr 1fr' : '1fr',
-                    gap: '60px',
-                    alignItems: 'center'
-                }}>
+            <div className={image ? "section-grid" : ""}>
                     <div style={{ order: image && imagePosition === "left" ? 2 : 1 }}>
                         <motion.div
                             initial="hidden"
