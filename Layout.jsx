@@ -30,12 +30,12 @@ const Layout = ({ children }) => {
                 backdropFilter: scrolled ? 'blur(20px)' : 'none',
                 borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent'
             }}>
-                <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     <Logo />
-                    <nav style={{ display: 'flex', gap: '32px' }}>
-                        <a href="/#features" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)', textDecoration: 'none' }}>Features</a>
-                        <a href="/#results" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)', textDecoration: 'none' }}>Results</a>
-                        <Link to="/contact" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '14px' }}>Contact</Link>
+                    <nav style={{ display: 'flex', gap: 'clamp(16px, 4vw, 32px)', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <a href="/#features" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)', textDecoration: 'none', whiteSpace: 'nowrap' }}>Features</a>
+                        <a href="/#results" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)', textDecoration: 'none', whiteSpace: 'nowrap' }}>Results</a>
+                        <Link to="/contact" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '14px', whiteSpace: 'nowrap' }}>Contact</Link>
                     </nav>
                 </div>
             </header>
@@ -50,15 +50,16 @@ const Layout = ({ children }) => {
                 padding: '80px 0 40px',
                 backgroundColor: 'var(--color-background)',
                 borderTop: '1px solid var(--color-border)'
-            }}>    <div className="container">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '60px' }}>
+            }}>
+                <div className="container">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '60px', flexWrap: 'wrap', gap: '40px' }}>
                         <div>
                             <Logo />
                             <p style={{ marginTop: '16px', maxWidth: '300px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>
                                 Intelligent assistants for modern retail.
                             </p>
                         </div>
-                        <div style={{ display: 'flex', gap: '60px' }}>
+                        <div style={{ display: 'flex', gap: 'clamp(40px, 8vw, 60px)', flexWrap: 'wrap' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                 <h4 style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>Product</h4>
                                 <a href="#features" style={{ fontSize: '14px', color: 'var(--color-text-primary)' }}>Features</a>

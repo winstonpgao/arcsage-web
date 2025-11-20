@@ -142,3 +142,106 @@ p {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* ============================================
+   MOBILE & TABLET RESPONSIVE STYLES
+   ============================================ */
+
+/* Tablet Styles (iPad, up to 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .section-padding {
+    padding: 80px 0;
+  }
+
+  h1 {
+    font-size: 48px;
+  }
+
+  h2 {
+    font-size: 40px;
+  }
+
+  h3 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+}
+
+/* Mobile Styles (iPhone, up to 768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .section-padding {
+    padding: 60px 0;
+  }
+
+  h1 {
+    font-size: 36px;
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  /* Stack elements vertically on mobile */
+  .flex-desktop {
+    flex-direction: column !important;
+  }
+}
+
+/* Small Mobile (iPhone SE, small phones) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .section-padding {
+    padding: 48px 0;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    /* Full width buttons on small screens */
+  }
+}
