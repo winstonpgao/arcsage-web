@@ -24,7 +24,7 @@ const Integrations = () => {
                     </p>
                 </div>
 
-                <div style={{
+                <div className="integrations-grid" style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                     gap: '40px',

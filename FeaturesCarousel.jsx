@@ -41,7 +41,7 @@ const FeaturesCarousel = ({ features }) => {
 
     return (
         <div
-            style={{ position: 'relative', width: '100%', height: '600px', overflow: 'hidden', borderRadius: '24px', background: 'var(--color-surface)', cursor: 'pointer' }}
+            className="carousel-container"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onClick={nextSlide}
@@ -53,10 +53,10 @@ const FeaturesCarousel = ({ features }) => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -100 }}
                     transition={{ duration: 0.5 }}
-                    style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px' }}
+                    className="carousel-content"
                 >
                     {/* Content Side */}
-                    <div style={{ flex: 1, paddingRight: '60px', zIndex: 2 }}>
+                    <div className="carousel-text">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ const FeaturesCarousel = ({ features }) => {
                     </div>
 
                     {/* Image Side */}
-                    <div style={{ flex: 1, height: '100%', position: 'relative', borderRadius: '16px', overflow: 'hidden' }}>
+                    <div className="carousel-image">
                         <div style={{
                             position: 'absolute',
                             inset: 0,
@@ -114,25 +114,7 @@ const FeaturesCarousel = ({ features }) => {
                     e.stopPropagation();
                     prevSlide();
                 }}
-                style={{
-                    position: 'absolute',
-                    left: '20px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '50%',
-                    width: '48px',
-                    height: '48px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    cursor: 'pointer',
-                    backdropFilter: 'blur(10px)',
-                    zIndex: 10,
-                    transition: 'all 0.2s ease'
-                }}
+                className="carousel-nav-button left"
                 onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
             >
@@ -144,25 +126,7 @@ const FeaturesCarousel = ({ features }) => {
                     e.stopPropagation();
                     nextSlide();
                 }}
-                style={{
-                    position: 'absolute',
-                    right: '20px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '50%',
-                    width: '48px',
-                    height: '48px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    cursor: 'pointer',
-                    backdropFilter: 'blur(10px)',
-                    zIndex: 10,
-                    transition: 'all 0.2s ease'
-                }}
+                className="carousel-nav-button right"
                 onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
             >
@@ -170,15 +134,7 @@ const FeaturesCarousel = ({ features }) => {
             </button>
 
             {/* Dots Navigation */}
-            <div style={{
-                position: 'absolute',
-                bottom: '30px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                gap: '12px',
-                zIndex: 10
-            }}>
+            <div className="carousel-dots">
                 {features.map((_, idx) => (
                     <button
                         key={idx}

@@ -147,6 +147,80 @@ p {
    MOBILE & TABLET RESPONSIVE STYLES
    ============================================ */
 
+/* Carousel Responsive Styles */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.carousel-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px;
+}
+
+.carousel-text {
+  flex: 1;
+  padding-right: 60px;
+  z-index: 2;
+}
+
+.carousel-image {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.carousel-nav-button.left {
+  left: 20px;
+}
+
+.carousel-nav-button.right {
+  right: 20px;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90%;
+}
+
 /* Tablet Styles (iPad, up to 1024px) */
 @media (max-width: 1024px) {
   .container {
@@ -171,6 +245,24 @@ p {
 
   p {
     font-size: 18px;
+  }
+
+  /* Carousel adjustments for tablet */
+  .carousel-container {
+    height: 500px;
+  }
+
+  .carousel-content {
+    padding: 40px;
+  }
+
+  .carousel-text {
+    padding-right: 40px;
+  }
+
+  .carousel-nav-button {
+    width: 40px;
+    height: 40px;
   }
 }
 
@@ -210,6 +302,58 @@ p {
   .flex-desktop {
     flex-direction: column !important;
   }
+
+  /* Carousel mobile optimization */
+  .carousel-container {
+    height: auto;
+    min-height: 500px;
+    border-radius: 16px;
+  }
+
+  .carousel-content {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .carousel-text {
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .carousel-text h3 {
+    font-size: 24px !important;
+  }
+
+  .carousel-text h4 {
+    font-size: 18px !important;
+  }
+
+  .carousel-text p {
+    font-size: 15px !important;
+  }
+
+  .carousel-image {
+    width: 100%;
+    height: 250px;
+    flex: none;
+  }
+
+  .carousel-nav-button {
+    display: none;
+    /* Hide arrow buttons on mobile */
+  }
+
+  .carousel-dots {
+    bottom: 20px;
+    gap: 8px;
+  }
+
+  /* Integrations grid - 2 columns on mobile */
+  .integrations-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
 }
 
 /* Small Mobile (iPhone SE, small phones) */
@@ -243,5 +387,42 @@ p {
     font-size: 14px;
     width: 100%;
     /* Full width buttons on small screens */
+  }
+
+  /* Carousel further optimization */
+  .carousel-container {
+    min-height: 450px;
+  }
+
+  .carousel-content {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .carousel-text h3 {
+    font-size: 20px !important;
+  }
+
+  .carousel-text h4 {
+    font-size: 16px !important;
+  }
+
+  .carousel-text p {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .carousel-image {
+    height: 200px;
+  }
+
+  .carousel-dots {
+    gap: 6px;
+    bottom: 16px;
+  }
+
+  /* Integrations - keep 2 columns but reduce sizes */
+  .integrations-grid {
+    gap: 16px !important;
   }
 }
