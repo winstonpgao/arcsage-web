@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Layout from './Layout';
 import Hero from './Hero';
 import Section from './Section';
@@ -210,6 +210,19 @@ const HomePage = () => {
               <div style={{ fontSize: '19px', color: 'var(--color-text-secondary)' }}>{stat.label}</div>
             </div>
           ))}
+        </div>
+      </Section>
+
+      {/* Final CTA */}
+      <Section id="cta" background="transparent">
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <h2 style={{ fontSize: '48px', marginBottom: '24px' }}>Ready to transform your support?</h2>
+          <p style={{ fontSize: '21px', color: 'var(--color-text-secondary)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px' }}>
+            Join the retailers who are scaling their operations with ArcSage's intelligent agents.
+          </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+            <Link to="/contact" className="btn btn-primary" style={{ padding: '16px 32px', fontSize: '18px' }}>Get Started Now</Link>
+          </div>
         </div>
       </Section>
 

@@ -29,13 +29,14 @@ const Section = ({ id, title, subtitle, children, background = "white", theme = 
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
                             variants={{
-                                hidden: { opacity: 0, y: 20 },
+                                hidden: { opacity: 0, y: 30 },
                                 visible: {
                                     opacity: 1,
                                     y: 0,
                                     transition: {
-                                        duration: 0.6,
-                                        staggerChildren: 0.1
+                                        duration: 0.8,
+                                        ease: [0.22, 1, 0.36, 1],
+                                        staggerChildren: 0.15
                                     }
                                 }
                             }}
@@ -56,9 +57,10 @@ const Section = ({ id, title, subtitle, children, background = "white", theme = 
                                         opacity: 1,
                                         y: 0,
                                         transition: {
-                                            duration: 0.6,
-                                            delay: 0.2,
-                                            staggerChildren: 0.1
+                                            duration: 0.8,
+                                            ease: [0.22, 1, 0.36, 1], // Custom easeOutQuint-like curve
+                                            delay: 0.1,
+                                            staggerChildren: 0.15
                                         }
                                     }
                                 }}
