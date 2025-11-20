@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const FeaturesCarousel = ({ features }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+    console.log('FeaturesCarousel rendered with features:', features);
 
     if (!features || features.length === 0) {
         return null;
@@ -12,11 +15,13 @@ const FeaturesCarousel = ({ features }) => {
 
     // Auto-slide
     useEffect(() => {
+        if (isPaused) return;
+
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % totalPages);
         }, 8000); // 8 seconds per slide
         return () => clearInterval(interval);
-    }, [totalPages]);
+    }, [totalPages, isPaused]);
 
     // Placeholder for prevSlide and nextSlide functions, and Chevron icons
     // These would typically be defined or imported elsewhere in a real application.
@@ -35,7 +40,12 @@ const FeaturesCarousel = ({ features }) => {
     const { title, subtitle, description, image, imagePosition = 'right', items } = currentFeature;
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '600px', overflow: 'hidden', borderRadius: '24px', background: 'var(--color-surface)' }}>
+        <div
+            style={{ position: 'relative', width: '100%', height: '600px', overflow: 'hidden', borderRadius: '24px', background: 'var(--color-surface)', cursor: 'pointer' }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onClick={nextSlide}
+        >
             <AnimatePresence mode='wait'>
                 <motion.div
                     key={currentIndex}
@@ -81,8 +91,12 @@ const FeaturesCarousel = ({ features }) => {
                             zIndex: 1
                         }} />
                         <img
-                            src={features[currentIndex].image}
+                            src={features[currentIndex].image || 'https://placehold.co/600x400?text=No+Image'}
                             alt={features[currentIndex].title}
+                            onError={(e) => {
+                                console.error(`Failed to load image for feature: ${features[currentIndex].title}`, features[currentIndex].image);
+                                e.target.src = 'https://placehold.co/600x400?text=Image+Error';
+                            }}
                             style={{
                                 width: '100%',
                                 height: '100%',
@@ -96,7 +110,10 @@ const FeaturesCarousel = ({ features }) => {
 
             {/* Navigation Arrows */}
             <button
-                onClick={prevSlide}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    prevSlide();
+                }}
                 style={{
                     position: 'absolute',
                     left: '20px',
@@ -123,7 +140,10 @@ const FeaturesCarousel = ({ features }) => {
             </button>
 
             <button
-                onClick={nextSlide}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    nextSlide();
+                }}
                 style={{
                     position: 'absolute',
                     right: '20px',
@@ -162,7 +182,10 @@ const FeaturesCarousel = ({ features }) => {
                 {features.map((_, idx) => (
                     <button
                         key={idx}
-                        onClick={() => setCurrentIndex(idx)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentIndex(idx);
+                        }}
                         style={{
                             width: '30px',
                             height: '30px',
