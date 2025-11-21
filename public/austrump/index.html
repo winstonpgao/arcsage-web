@@ -29,22 +29,25 @@
             font-family: var(--font-primary);
             background-color: var(--color-background);
             color: var(--color-text-primary);
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
         }
 
         .container {
             width: 95vw;
-            height: 90vh;
+            min-height: 90vh;
+            height: auto;
             position: relative;
             background: var(--color-surface);
             border-radius: var(--card-radius);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
             overflow: hidden;
+            padding: 20px;
             perspective: 2000px;
             /* Essential for 3D flip */
         }
@@ -576,49 +579,95 @@
             display: block;
         }
 
-        /* ========================================
-           MOBILE RESPONSIVE STYLES
-           ======================================== */
-        
-        @media only screen and (max-width: 1024px) {
-            .container { width: 100vw; height: 100vh; border-radius: 0; }
-            h1 { font-size: 3rem; }
-            h2 { font-size: 1.6rem; }
-            p, li { font-size: 1.1rem; }
-            .nav-btn { width: 50px; height: 50px; font-size: 20px; }
-            .prev-btn { left: 20px; }
-            .next-btn { right: 20px; }
-            .logo-mark { font-size: 0.9rem; top: 20px; left: 20px; }
-            .lang-toggle { top: 20px; right: 20px; }
-            .card-grid { grid-template-columns: 1fr; gap: 16px; }
-            .split-container { flex-direction: column; gap: 20px; }
-            .data-table { font-size: 0.9rem; }
-            .data-table td { padding: 15px 20px; font-size: 1.1rem; }
+        /* Responsive adjustments */
+        @media (max-width: 1100px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-        
-        @media only screen and (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 1.3rem; margin-bottom: 2rem; }
-            p, li { font-size: 1rem; }
-            .flip-card-front { padding: 20px; }
-            .nav-btn { width: 44px; height: 44px; font-size: 18px; }
-            .prev-btn { left: 10px; }
-            .next-btn { right: 10px; }
-            .logo-mark { font-size: 0.75rem; top: 15px; left: 15px; }
-            .lang-toggle { top: 15px; right: 15px; padding: 6px 8px; }
-            .lang-btn { padding: 4px 10px; font-size: 0.8rem; }
-            .watermark { display: none; }
-            .slide-number { bottom: 15px; left: 15px; font-size: 0.85rem; }
-            .chat-bubble { font-size: 0.95rem; padding: 12px 18px; }
-            .score-indicator { position: relative; right: auto; top: auto; transform: none; margin-top: 8px; display: block; }
+
+        @media (max-width: 900px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            p,
+            li {
+                font-size: 1.05rem;
+            }
+
+            .chat-bubble {
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 20px;
+            }
         }
-        
-        @media (hover: none) and (pointer: coarse) {
-            .nav-btn { width: 60px; height: 60px; }
-            .lang-btn { padding: 8px 16px; min-height: 44px; }
-            .nav-btn:hover { transform: translateY(-50%); }
-            .card:hover { transform: none; }
-        }    </style>
+
+        @media (max-width: 768px) {
+            body {
+                align-items: flex-start;
+            }
+
+            .container {
+                width: 100%;
+                min-height: 100vh;
+                padding: 76px 14px 28px;
+                border-radius: 18px;
+            }
+
+            .content-wrapper {
+                padding: 0;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                width: 100%;
+            }
+
+            .nav-btn {
+                display: none;
+            }
+
+            .lang-toggle {
+                position: fixed;
+                top: 12px;
+                right: 12px;
+                left: 12px;
+                justify-content: center;
+                gap: 10px;
+                z-index: 300;
+            }
+
+            .flip-card-front,
+            .flip-card-back {
+                padding: 22px 18px;
+                align-items: flex-start;
+            }
+
+            .flip-card-back {
+                padding: 28px 22px;
+            }
+
+            .logo-mark {
+                top: 16px;
+                left: 18px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -936,7 +985,7 @@
                                     </tr>
                                     <tr>
                                         <td>🏦 Financing Status</td>
-                                        <td>🔥 Emotional Urgency</td>
+                                        <td>🔥 Purchase Urgency</td>
                                     </tr>
                                     <tr>
                                         <td>⏳ Timeline to Buy/Settle</td>
@@ -976,7 +1025,7 @@
                                     </tr>
                                     <tr>
                                         <td>🏦 融资状况</td>
-                                        <td>🔥 情感紧迫性</td>
+                                        <td>🔥 购买紧迫度</td>
                                     </tr>
                                     <tr>
                                         <td>⏳ 购买/交割时间表</td>
@@ -1146,8 +1195,8 @@
                     <div class="content-wrapper">
                         <!-- English Version -->
                         <div class="content-en">
-                            <h1>Real Conversation Example</h1>
-                            <h2>From Inquiry to Qualified Lead</h2>
+                            <h1>Conversation Snapshot</h1>
+                            <h2>Simplified example, not an actual buyer</h2>
 
                             <div class="chat-container" style="max-width: 900px; gap: 14px;">
                                 <div class="chat-bubble user">
@@ -1167,13 +1216,11 @@
                                     to buy?"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "ASAP. My kids start school Feb next year. Do you have anything near the train
-                                    station?"
+                                    "Need to move before school starts in Feb. Anything near the train station?"
                                     <div class="score-indicator score-medium">Score: 68</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "Understood—school timeline is important. Yes, we have 2BR near Glen Waverley
-                                    station. Do you have finance pre-approval?"
+                                    "School timing noted. We have 2BR options near Glen Waverley station. Do you have finance pre-approval?"
                                 </div>
                                 <div class="chat-bubble user">
                                     "Yes, approved for $950k. My wife and I are ready to inspect this weekend."
@@ -1184,8 +1231,8 @@
 
                         <!-- Chinese Version -->
                         <div class="content-cn">
-                            <h1>真实对话示例</h1>
-                            <h2>从咨询到合格潜在客户</h2>
+                            <h1>对话快照</h1>
+                            <h2>简化示例，并非真实买家</h2>
 
                             <div class="chat-container" style="max-width: 900px; gap: 14px;">
                                 <div class="chat-bubble user">
@@ -1203,11 +1250,11 @@
                                     "明白了。我们在Kingsway附近有几个符合这个范围的选项。您打算什么时候买？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "尽快。我孩子明年2月开学。你们有靠近火车站的吗？"
+                                    "我需要在明年2月开学前搬家。车站附近有房吗？"
                                     <div class="score-indicator score-medium">分数: 68</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "理解了——孩子上学的时间安排很重要。是的，我们在Glen Waverley站附近有2房。您有贷款预批吗？"
+                                    "时间点记下了。我们在Glen Waverley站附近有2房选择。您已经有贷款预批吗？"
                                 </div>
                                 <div class="chat-bubble user">
                                     "有的，批了95万。我太太和我这周末就可以看房。"
