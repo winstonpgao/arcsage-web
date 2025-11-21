@@ -638,7 +638,22 @@
             }
 
             .nav-btn {
-                display: none;
+                top: auto;
+                bottom: 14px;
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+            }
+
+            .prev-btn {
+                left: 18px;
+            }
+
+            .next-btn {
+                right: 18px;
             }
 
             .lang-toggle {
@@ -1200,31 +1215,32 @@
 
                             <div class="chat-container" style="max-width: 900px; gap: 14px;">
                                 <div class="chat-bubble user">
-                                    "I'm interested in properties around Glen Waverley. What's available?"
+                                    "I'm looking in Glen Waverley. What options do you have?"
                                     <div class="score-indicator score-low">Score: 12</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "Great! Are you looking for a house or apartment? And what's your ideal budget
-                                    range?"
+                                    "Thanks for reaching out. Are you after a townhouse or apartment? What's your budget range?"
                                 </div>
                                 <div class="chat-bubble user">
                                     "Apartment, 2-3 bedrooms. Budget around $800k-900k."
                                     <div class="score-indicator score-medium">Score: 45</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "Perfect. We have several options in that range near Kingsway. When are you looking
-                                    to buy?"
+                                    "Got it. We have options near Kingsway in that range. When are you hoping to move?"
                                 </div>
                                 <div class="chat-bubble user">
                                     "Need to move before school starts in Feb. Anything near the train station?"
                                     <div class="score-indicator score-medium">Score: 68</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "School timing noted. We have 2BR options near Glen Waverley station. Do you have finance pre-approval?"
+                                    "School timing noted. We have 2BR near Glen Waverley station. Do you already have finance pre-approval?"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "Yes, approved for $950k. My wife and I are ready to inspect this weekend."
-                                    <div class="score-indicator score-high">Score: 94 ✅</div>
+                                    "Yes, approved for $950k. My wife and I can inspect this weekend."
+                                    <div class="score-indicator score-high">Score: 90</div>
+                                </div>
+                                <div class="chat-bubble bot">
+                                    "Great. I'll book a Saturday slot and send you two matching listings now. Do you prefer morning or afternoon?"
                                 </div>
                             </div>
                         </div>
@@ -1236,29 +1252,32 @@
 
                             <div class="chat-container" style="max-width: 900px; gap: 14px;">
                                 <div class="chat-bubble user">
-                                    "我对Glen Waverley附近的房产感兴趣。有什么可以看的？"
+                                    "我想在Glen Waverley找房。现在有什么选择？"
                                     <div class="score-indicator score-low">分数: 12</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "太好了！您是想找house还是公寓？您的预算范围大概是多少？"
+                                    "谢谢联系。您想要联排还是公寓？预算范围是多少？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "公寓，2-3房。预算80-90万左右。"
+                                    "公寓，2-3房。预算80-90万。"
                                     <div class="score-indicator score-medium">分数: 45</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "明白了。我们在Kingsway附近有几个符合这个范围的选项。您打算什么时候买？"
+                                    "收到。Kingsway附近有符合的房源。您计划何时搬家？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "我需要在明年2月开学前搬家。车站附近有房吗？"
+                                    "我要在明年2月开学前搬。车站附近有房吗？"
                                     <div class="score-indicator score-medium">分数: 68</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "时间点记下了。我们在Glen Waverley站附近有2房选择。您已经有贷款预批吗？"
+                                    "时间节点记下了。Glen Waverley站附近有2房。您已经有贷款预批了吗？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "有的，批了95万。我太太和我这周末就可以看房。"
-                                    <div class="score-indicator score-high">分数: 94 ✅</div>
+                                    "有，批了95万。我和太太周末可以看房。"
+                                    <div class="score-indicator score-high">分数: 90</div>
+                                </div>
+                                <div class="chat-bubble bot">
+                                    "好的，我先约周六看房，并发两套符合的房源给您。您更倾向上午还是下午？"
                                 </div>
                             </div>
                         </div>
