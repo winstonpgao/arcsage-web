@@ -149,7 +149,7 @@
         }
 
         h1 {
-            font-size: 3.6rem;
+            font-size: clamp(2.6rem, 3.5vw, 3.2rem);
             margin-bottom: 0.5rem;
             line-height: 1.1;
             letter-spacing: -0.04em;
@@ -162,7 +162,7 @@
         }
 
         h2 {
-            font-size: 1.8rem;
+            font-size: clamp(1.3rem, 2.6vw, 1.7rem);
             color: var(--color-text-secondary);
             margin-bottom: 3rem;
             font-weight: 400;
@@ -180,15 +180,15 @@
 
         p,
         li {
-            font-size: 1.4rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            line-height: 1.55;
             color: #d4d4d8;
             text-align: left;
         }
 
         ul {
             text-align: left;
-            padding-left: 20px;
+            padding-left: 18px;
         }
 
         li {
@@ -287,14 +287,14 @@
         .back-content h2 {
             color: var(--color-accent-start);
             margin-bottom: 20px;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             border-bottom: 2px solid rgba(167, 139, 250, 0.3);
             padding-bottom: 10px;
             width: 100%;
         }
 
         .back-content p {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #ccc;
             max-width: 800px;
         }
@@ -598,7 +598,7 @@
 
             p,
             li {
-                font-size: 0.98rem;
+                font-size: 0.94rem;
             }
 
             .chat-bubble {
@@ -606,7 +606,7 @@
             }
 
             .card {
-                padding: 20px;
+                padding: 16px;
             }
 
             .split-container {
@@ -615,7 +615,12 @@
             }
 
             .split-col {
-                padding: 22px;
+                padding: 18px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
             }
         }
 
@@ -635,6 +640,7 @@
                 padding: 0;
                 align-items: flex-start;
                 gap: 10px;
+                max-width: 100%;
             }
 
             .card-grid {
