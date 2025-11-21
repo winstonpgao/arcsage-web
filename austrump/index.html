@@ -29,22 +29,25 @@
             font-family: var(--font-primary);
             background-color: var(--color-background);
             color: var(--color-text-primary);
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
         }
 
         .container {
             width: 95vw;
-            height: 90vh;
+            min-height: 90vh;
+            height: auto;
             position: relative;
             background: var(--color-surface);
             border-radius: var(--card-radius);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
             overflow: hidden;
+            padding: 20px;
             perspective: 2000px;
             /* Essential for 3D flip */
         }
@@ -60,6 +63,7 @@
             pointer-events: none;
             transition: opacity 0.5s ease-in-out;
             z-index: 1;
+            overflow-y: auto;
         }
 
         .slide.active {
@@ -145,7 +149,7 @@
         }
 
         h1 {
-            font-size: 4.5rem;
+            font-size: clamp(2.6rem, 3.5vw, 3.2rem);
             margin-bottom: 0.5rem;
             line-height: 1.1;
             letter-spacing: -0.04em;
@@ -158,7 +162,7 @@
         }
 
         h2 {
-            font-size: 2.2rem;
+            font-size: clamp(1.3rem, 2.6vw, 1.7rem);
             color: var(--color-text-secondary);
             margin-bottom: 3rem;
             font-weight: 400;
@@ -176,19 +180,19 @@
 
         p,
         li {
-            font-size: 1.4rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            line-height: 1.55;
             color: #d4d4d8;
             text-align: left;
         }
 
         ul {
             text-align: left;
-            padding-left: 20px;
+            padding-left: 18px;
         }
 
         li {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .text-gradient {
@@ -283,14 +287,14 @@
         .back-content h2 {
             color: var(--color-accent-start);
             margin-bottom: 20px;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             border-bottom: 2px solid rgba(167, 139, 250, 0.3);
             padding-bottom: 10px;
             width: 100%;
         }
 
         .back-content p {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #ccc;
             max-width: 800px;
         }
@@ -576,49 +580,237 @@
             display: block;
         }
 
-        /* ========================================
-           MOBILE RESPONSIVE STYLES
-           ======================================== */
-        
-        @media only screen and (max-width: 1024px) {
-            .container { width: 100vw; height: 100vh; border-radius: 0; }
-            h1 { font-size: 3rem; }
-            h2 { font-size: 1.6rem; }
-            p, li { font-size: 1.1rem; }
-            .nav-btn { width: 50px; height: 50px; font-size: 20px; }
-            .prev-btn { left: 20px; }
-            .next-btn { right: 20px; }
-            .logo-mark { font-size: 0.9rem; top: 20px; left: 20px; }
-            .lang-toggle { top: 20px; right: 20px; }
-            .card-grid { grid-template-columns: 1fr; gap: 16px; }
-            .split-container { flex-direction: column; gap: 20px; }
-            .data-table { font-size: 0.9rem; }
-            .data-table td { padding: 15px 20px; font-size: 1.1rem; }
+        /* Responsive adjustments */
+        @media (max-width: 1100px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-        
-        @media only screen and (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 1.3rem; margin-bottom: 2rem; }
-            p, li { font-size: 1rem; }
-            .flip-card-front { padding: 20px; }
-            .nav-btn { width: 44px; height: 44px; font-size: 18px; }
-            .prev-btn { left: 10px; }
-            .next-btn { right: 10px; }
-            .logo-mark { font-size: 0.75rem; top: 15px; left: 15px; }
-            .lang-toggle { top: 15px; right: 15px; padding: 6px 8px; }
-            .lang-btn { padding: 4px 10px; font-size: 0.8rem; }
-            .watermark { display: none; }
-            .slide-number { bottom: 15px; left: 15px; font-size: 0.85rem; }
-            .chat-bubble { font-size: 0.95rem; padding: 12px 18px; }
-            .score-indicator { position: relative; right: auto; top: auto; transform: none; margin-top: 8px; display: block; }
+
+        @media (max-width: 900px) {
+            h1 {
+                font-size: 2.4rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            p,
+            li {
+                font-size: 0.94rem;
+            }
+
+            .chat-bubble {
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .split-container {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .split-col {
+                padding: 18px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
         }
-        
-        @media (hover: none) and (pointer: coarse) {
-            .nav-btn { width: 60px; height: 60px; }
-            .lang-btn { padding: 8px 16px; min-height: 44px; }
-            .nav-btn:hover { transform: translateY(-50%); }
-            .card:hover { transform: none; }
-        }    </style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                align-items: flex-start;
+                overflow-x: hidden;
+                /* Prevent horizontal scroll on body */
+            }
+
+            .container {
+                width: 100%;
+                min-height: 100dvh;
+                /* Use dvh for better mobile browser support */
+                padding: 40px 10px 15px;
+                /* Further reduced top padding */
+                border-radius: 0;
+                /* Remove radius on full mobile */
+                overflow-x: hidden;
+                /* Prevent container horizontal scroll */
+            }
+
+            .content-wrapper {
+                padding: 0;
+                align-items: flex-start;
+                gap: 8px;
+                max-width: 100%;
+                width: 100%;
+                /* Ensure full width */
+            }
+
+            h1 {
+                font-size: 1.6rem;
+                /* Further reduced */
+                word-wrap: break-word;
+                /* Prevent long words breaking layout */
+            }
+
+            h2 {
+                font-size: 1.05rem;
+                margin-bottom: 1.2rem;
+            }
+
+            h3 {
+                font-size: 1rem;
+                margin-bottom: 0.4rem;
+            }
+
+            p,
+            li {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+                width: 100%;
+                /* Ensure grid takes full width */
+            }
+
+            .card {
+                padding: 15px;
+                width: 100%;
+                /* Ensure card takes full width */
+            }
+
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                width: 100%;
+                font-size: 0.8rem;
+                /* Smaller table font */
+                white-space: nowrap;
+                /* Keep cells on one line if possible, scroll instead */
+            }
+
+            .data-table td,
+            .data-table th {
+                padding: 8px 10px;
+                /* Further reduced cell padding */
+            }
+
+            .nav-btn {
+                top: 50%;
+                bottom: auto;
+                transform: translateY(-50%);
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+            }
+
+            .prev-btn {
+                left: 5px;
+            }
+
+            .next-btn {
+                right: 5px;
+            }
+
+            .lang-toggle {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                left: auto;
+                justify-content: flex-end;
+                gap: 6px;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.65);
+                padding: 4px 8px;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                border-radius: 16px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            }
+
+            .lang-btn {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+
+            .flip-card-front,
+            .flip-card-back {
+                padding: 15px 10px;
+                align-items: flex-start;
+                width: 100%;
+                /* Ensure full width */
+            }
+
+            .flip-card-back {
+                padding: 20px 15px;
+            }
+
+            .logo-mark {
+                top: 12px;
+                left: 15px;
+                font-size: 0.8rem;
+            }
+
+            /* Specific adjustments for chat bubbles on mobile */
+            .chat-bubble {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                max-width: 90%;
+                /* Prevent bubbles from being too wide */
+            }
+
+            .chat-container {
+                gap: 8px;
+                width: 100%;
+            }
+
+            /* Ensure split container is vertical */
+            .split-container {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .split-col {
+                padding: 15px;
+                width: 100%;
+            }
+
+            /* Fix for Agent Notification Card on Mobile */
+            .card[style*="max-width: 600px"] {
+                padding: 15px !important;
+            }
+
+            /* Allow wrapping in notification header */
+            .card[style*="max-width: 600px"]>div:first-child {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .score-indicator {
+                position: static;
+                /* Stack score indicator on mobile */
+                display: inline-block;
+                margin-top: 5px;
+                transform: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -936,7 +1128,7 @@
                                     </tr>
                                     <tr>
                                         <td>🏦 Financing Status</td>
-                                        <td>🔥 Emotional Urgency</td>
+                                        <td>🔥 Purchase Urgency</td>
                                     </tr>
                                     <tr>
                                         <td>⏳ Timeline to Buy/Settle</td>
@@ -976,7 +1168,7 @@
                                     </tr>
                                     <tr>
                                         <td>🏦 融资状况</td>
-                                        <td>🔥 情感紧迫性</td>
+                                        <td>🔥 购买紧迫度</td>
                                     </tr>
                                     <tr>
                                         <td>⏳ 购买/交割时间表</td>
@@ -1146,16 +1338,16 @@
                     <div class="content-wrapper">
                         <!-- English Version -->
                         <div class="content-en">
-                            <h1>Real Conversation Example</h1>
-                            <h2>From Inquiry to Qualified Lead</h2>
+                            <h1>Conversation Snapshot</h1>
+                            <h2>Simplified example, not an actual buyer</h2>
 
                             <div class="chat-container" style="max-width: 900px; gap: 14px;">
                                 <div class="chat-bubble user">
-                                    "I'm interested in properties around Glen Waverley. What's available?"
+                                    "I'm looking in Glen Waverley. What options do you have?"
                                     <div class="score-indicator score-low">Score: 12</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "Great! Are you looking for a house or apartment? And what's your ideal budget
+                                    "Thanks for reaching out. Are you after a townhouse or apartment? What's your budget
                                     range?"
                                 </div>
                                 <div class="chat-bubble user">
@@ -1163,55 +1355,60 @@
                                     <div class="score-indicator score-medium">Score: 45</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "Perfect. We have several options in that range near Kingsway. When are you looking
-                                    to buy?"
+                                    "Got it. We have options near Kingsway in that range. When are you hoping to move?"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "ASAP. My kids start school Feb next year. Do you have anything near the train
-                                    station?"
+                                    "Need to move before school starts in Feb. Anything near the train station?"
                                     <div class="score-indicator score-medium">Score: 68</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "Understood—school timeline is important. Yes, we have 2BR near Glen Waverley
-                                    station. Do you have finance pre-approval?"
+                                    "School timing noted. We have 2BR near Glen Waverley station. Do you already have
+                                    finance pre-approval?"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "Yes, approved for $950k. My wife and I are ready to inspect this weekend."
-                                    <div class="score-indicator score-high">Score: 94 ✅</div>
+                                    "Yes, approved for $950k. My wife and I can inspect this weekend."
+                                    <div class="score-indicator score-high">Score: 90</div>
+                                </div>
+                                <div class="chat-bubble bot">
+                                    "Great. I'll book a Saturday slot and send you two matching listings now. Do you
+                                    prefer morning or afternoon?"
                                 </div>
                             </div>
                         </div>
 
                         <!-- Chinese Version -->
                         <div class="content-cn">
-                            <h1>真实对话示例</h1>
-                            <h2>从咨询到合格潜在客户</h2>
+                            <h1>对话快照</h1>
+                            <h2>简化示例，并非真实买家</h2>
 
                             <div class="chat-container" style="max-width: 900px; gap: 14px;">
                                 <div class="chat-bubble user">
-                                    "我对Glen Waverley附近的房产感兴趣。有什么可以看的？"
+                                    "我想在Glen Waverley找房。现在有什么选择？"
                                     <div class="score-indicator score-low">分数: 12</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "太好了！您是想找house还是公寓？您的预算范围大概是多少？"
+                                    "谢谢联系。您想要联排还是公寓？预算范围是多少？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "公寓，2-3房。预算80-90万左右。"
+                                    "公寓，2-3房。预算80-90万。"
                                     <div class="score-indicator score-medium">分数: 45</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "明白了。我们在Kingsway附近有几个符合这个范围的选项。您打算什么时候买？"
+                                    "收到。Kingsway附近有符合的房源。您计划何时搬家？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "尽快。我孩子明年2月开学。你们有靠近火车站的吗？"
+                                    "我要在明年2月开学前搬。车站附近有房吗？"
                                     <div class="score-indicator score-medium">分数: 68</div>
                                 </div>
                                 <div class="chat-bubble bot">
-                                    "理解了——孩子上学的时间安排很重要。是的，我们在Glen Waverley站附近有2房。您有贷款预批吗？"
+                                    "已记录时间要求。Glen Waverley站附近有2房。您已经有贷款预批了吗？"
                                 </div>
                                 <div class="chat-bubble user">
-                                    "有的，批了95万。我太太和我这周末就可以看房。"
-                                    <div class="score-indicator score-high">分数: 94 ✅</div>
+                                    "有，批了95万。我和太太周末可以看房。"
+                                    <div class="score-indicator score-high">分数: 90</div>
+                                </div>
+                                <div class="chat-bubble bot">
+                                    "好的，我先约周六看房，并发两套符合的房源给您。您更倾向上午还是下午？"
                                 </div>
                             </div>
                         </div>
@@ -1361,7 +1558,8 @@
                                 <div class="card">
                                     <h3>安全护栏</h3>
                                     <ul>
-                                        <li><strong>涉及法律或安全承诺的请求，例如“这个区安全吗？” → 系统只提供中立、事实性信息，避免作出不当判断。</strong> "这区安全吗？" -> 安全拒绝。</li>
+                                        <li><strong>涉及法律或安全承诺的请求，例如“这个区安全吗？” → 系统只提供中立、事实性信息，避免作出不当判断。</strong> "这区安全吗？"
+                                            -> 安全拒绝。</li>
                                         <li><strong>财务建议:</strong> 明确避免给出贷款建议。</li>
                                         <li><strong>内部标记:</strong> 风险对话标记供人工审查。</li>
                                     </ul>
@@ -1816,6 +2014,29 @@
         // Init
         updateSlide();
         setLanguage('en'); // Set default language
+
+        // Touch swipe navigation for mobile
+        let touchStartX = null;
+        let touchEndX = null;
+        const SWIPE_THRESHOLD = 40;
+
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].clientX;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].clientX;
+            const delta = touchEndX - touchStartX;
+            if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+            if (delta < 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+
+        document.addEventListener('touchstart', handleTouchStart, { passive: true });
+        document.addEventListener('touchend', handleTouchEnd, { passive: true });
     </script>
 </body>
 
