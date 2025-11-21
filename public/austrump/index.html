@@ -63,6 +63,7 @@
             pointer-events: none;
             transition: opacity 0.5s ease-in-out;
             z-index: 1;
+            overflow-y: auto;
         }
 
         .slide.active {
@@ -638,8 +639,9 @@
             }
 
             .nav-btn {
-                top: auto;
-                bottom: 14px;
+                top: 50%;
+                bottom: auto;
+                transform: translateY(-50%);
                 width: 48px;
                 height: 48px;
                 font-size: 18px;
@@ -649,20 +651,20 @@
             }
 
             .prev-btn {
-                left: 18px;
+                left: 12px;
             }
 
             .next-btn {
-                right: 18px;
+                right: 12px;
             }
 
             .lang-toggle {
                 position: fixed;
                 top: 12px;
                 right: 12px;
-                left: 12px;
-                justify-content: center;
-                gap: 10px;
+                left: auto;
+                justify-content: flex-end;
+                gap: 8px;
                 z-index: 300;
             }
 
@@ -1803,10 +1805,10 @@
         }
     </style>
 
-    <script>
-        const slides = document.querySelectorAll('.slide');
-        let currentSlide = 1;
-        const totalSlides = slides.length;
+        <script>
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 1;
+            const totalSlides = slides.length;
 
         function updateSlide() {
             // Reset flips when changing slides
@@ -1879,10 +1881,33 @@
             }
         }
 
-        // Init
-        updateSlide();
-        setLanguage('en'); // Set default language
-    </script>
-</body>
+            // Init
+            updateSlide();
+            setLanguage('en'); // Set default language
+
+            // Touch swipe navigation for mobile
+            let touchStartX = null;
+            let touchEndX = null;
+            const SWIPE_THRESHOLD = 40;
+
+            function handleTouchStart(e) {
+                touchStartX = e.changedTouches[0].clientX;
+            }
+
+            function handleTouchEnd(e) {
+                touchEndX = e.changedTouches[0].clientX;
+                const delta = touchEndX - touchStartX;
+                if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+                if (delta < 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+
+            document.addEventListener('touchstart', handleTouchStart, { passive: true });
+            document.addEventListener('touchend', handleTouchEnd, { passive: true });
+        </script>
+    </body>
 
 </html>
