@@ -639,8 +639,8 @@
                 width: 100%;
                 min-height: 100dvh;
                 /* Use dvh for better mobile browser support */
-                padding: 40px 10px 15px;
-                /* Further reduced top padding */
+                padding: 70px 15px 20px;
+                /* Increased top padding to clear language toggle */
                 border-radius: 0;
                 /* Remove radius on full mobile */
                 overflow-x: hidden;
@@ -650,7 +650,7 @@
             .content-wrapper {
                 padding: 0;
                 align-items: flex-start;
-                gap: 8px;
+                gap: 12px;
                 max-width: 100%;
                 width: 100%;
                 /* Ensure full width */
@@ -661,6 +661,7 @@
                 /* Further reduced */
                 word-wrap: break-word;
                 /* Prevent long words breaking layout */
+                margin-top: 0;
             }
 
             h2 {
@@ -681,15 +682,19 @@
 
             .card-grid {
                 grid-template-columns: 1fr !important;
-                gap: 10px;
+                gap: 12px;
                 width: 100%;
                 /* Ensure grid takes full width */
+                margin: 0;
+                /* Reset margins */
             }
 
             .card {
                 padding: 15px;
                 width: 100%;
                 /* Ensure card takes full width */
+                margin: 0;
+                /* Reset margins */
             }
 
             .data-table {
@@ -730,8 +735,8 @@
 
             .lang-toggle {
                 position: fixed;
-                top: 10px;
-                right: 10px;
+                top: 15px;
+                right: 15px;
                 left: auto;
                 justify-content: flex-end;
                 gap: 6px;
@@ -750,7 +755,8 @@
 
             .flip-card-front,
             .flip-card-back {
-                padding: 15px 10px;
+                padding: 0;
+                /* Remove padding from flip card wrapper to let content control it */
                 align-items: flex-start;
                 width: 100%;
                 /* Ensure full width */
@@ -761,7 +767,7 @@
             }
 
             .logo-mark {
-                top: 12px;
+                top: 15px;
                 left: 15px;
                 font-size: 0.8rem;
             }
@@ -772,10 +778,16 @@
                 font-size: 0.85rem;
                 max-width: 90%;
                 /* Prevent bubbles from being too wide */
+                display: flex;
+                flex-direction: column;
+                /* Stack content vertically */
+                align-items: flex-start;
+                /* Align left */
+                gap: 5px;
             }
 
             .chat-container {
-                gap: 8px;
+                gap: 10px;
                 width: 100%;
             }
 
@@ -808,6 +820,9 @@
                 display: inline-block;
                 margin-top: 5px;
                 transform: none;
+                font-size: 0.75rem;
+                /* Smaller score text */
+                padding: 2px 8px;
             }
         }
     </style>
