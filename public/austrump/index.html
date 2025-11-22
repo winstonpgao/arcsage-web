@@ -629,6 +629,11 @@
         }
 
         @media (max-width: 768px) {
+            * {
+                box-sizing: border-box;
+                /* Global reset for mobile to prevent overflow */
+            }
+
             body {
                 align-items: flex-start;
                 overflow-x: hidden;
@@ -664,7 +669,7 @@
             }
 
             h1 {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
                 /* Further reduced */
                 word-wrap: break-word;
                 /* Prevent long words breaking layout */
@@ -675,7 +680,7 @@
             }
 
             h2 {
-                font-size: 1.05rem;
+                font-size: 1rem;
                 margin-bottom: 1.2rem;
                 text-align: center;
                 /* Center subheadings */
@@ -695,12 +700,12 @@
 
             .card-grid {
                 grid-template-columns: 1fr !important;
+                /* Force single column */
                 gap: 12px;
                 width: 100%;
                 /* Ensure grid takes full width */
                 margin: 0;
                 /* Reset margins */
-                box-sizing: border-box;
             }
 
             .card {
@@ -709,25 +714,50 @@
                 /* Ensure card takes full width */
                 margin: 0;
                 /* Reset margins */
-                box-sizing: border-box;
             }
 
+            /* Vertical Table Display for Mobile (Pages 3, 6, 13, 18) */
             .data-table {
                 display: block;
-                overflow-x: auto;
                 width: 100%;
-                font-size: 0.8rem;
-                /* Smaller table font */
-                white-space: nowrap;
-                /* Keep cells on one line if possible, scroll instead */
-                -webkit-overflow-scrolling: touch;
-                /* Smooth scrolling on iOS */
+                border: none;
             }
 
-            .data-table td,
-            .data-table th {
-                padding: 8px 10px;
-                /* Further reduced cell padding */
+            .data-table thead {
+                display: none;
+                /* Hide headers */
+            }
+
+            .data-table tbody {
+                display: block;
+                width: 100%;
+            }
+
+            .data-table tr {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 15px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                padding: 15px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+            .data-table td {
+                display: block;
+                width: 100%;
+                padding: 5px 0;
+                border: none;
+                /* Remove cell borders */
+                text-align: left;
+                /* Align text left */
+            }
+
+            /* Add visual separation between cells in a "card" row */
+            .data-table td:not(:last-child) {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                margin-bottom: 5px;
+                padding-bottom: 5px;
             }
 
             /* Fix for Architecture Diagram/Image on Page 7 */
@@ -810,7 +840,6 @@
                 align-items: flex-start;
                 /* Align left */
                 gap: 5px;
-                box-sizing: border-box;
             }
 
             .chat-container {
@@ -832,16 +861,16 @@
             .split-col {
                 padding: 15px;
                 width: 100%;
-                box-sizing: border-box;
             }
 
-            /* Fix for Agent Notification Card on Mobile */
+            /* Fix for Agent Notification Card on Mobile (Page 9) */
             .card[style*="max-width: 600px"] {
                 padding: 15px !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 /* Override inline max-width */
-                box-sizing: border-box;
+                margin-top: 40px !important;
+                /* Add top margin to prevent overlap */
             }
 
             /* Allow wrapping in notification header */
@@ -861,9 +890,7 @@
                 padding: 2px 8px;
             }
 
-            /* Specific fix for top overlap on EN version of Slide 8 & 9 */
-            /* We can target the specific content divs if needed, or just rely on the increased container padding */
-            /* Adding a bit more top margin to the first h1 in content-en to be safe */
+            /* Specific fix for top overlap on EN version of Slide 8 */
             .content-en h1:first-child {
                 margin-top: 10px;
             }
