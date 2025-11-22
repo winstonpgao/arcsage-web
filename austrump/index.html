@@ -645,11 +645,18 @@
                 /* Remove radius on full mobile */
                 overflow-x: hidden;
                 /* Prevent container horizontal scroll */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* Center content horizontally */
             }
 
             .content-wrapper {
                 padding: 0;
-                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* Center content within wrapper */
                 gap: 12px;
                 max-width: 100%;
                 width: 100%;
@@ -662,11 +669,17 @@
                 word-wrap: break-word;
                 /* Prevent long words breaking layout */
                 margin-top: 0;
+                text-align: center;
+                /* Center headings */
+                width: 100%;
             }
 
             h2 {
                 font-size: 1.05rem;
                 margin-bottom: 1.2rem;
+                text-align: center;
+                /* Center subheadings */
+                width: 100%;
             }
 
             h3 {
@@ -687,6 +700,7 @@
                 /* Ensure grid takes full width */
                 margin: 0;
                 /* Reset margins */
+                box-sizing: border-box;
             }
 
             .card {
@@ -695,6 +709,7 @@
                 /* Ensure card takes full width */
                 margin: 0;
                 /* Reset margins */
+                box-sizing: border-box;
             }
 
             .data-table {
@@ -705,12 +720,20 @@
                 /* Smaller table font */
                 white-space: nowrap;
                 /* Keep cells on one line if possible, scroll instead */
+                -webkit-overflow-scrolling: touch;
+                /* Smooth scrolling on iOS */
             }
 
             .data-table td,
             .data-table th {
                 padding: 8px 10px;
                 /* Further reduced cell padding */
+            }
+
+            /* Fix for Architecture Diagram/Image on Page 7 */
+            img {
+                max-width: 100%;
+                height: auto;
             }
 
             .nav-btn {
@@ -757,7 +780,10 @@
             .flip-card-back {
                 padding: 0;
                 /* Remove padding from flip card wrapper to let content control it */
-                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* Center content in flip card */
                 width: 100%;
                 /* Ensure full width */
             }
@@ -784,11 +810,16 @@
                 align-items: flex-start;
                 /* Align left */
                 gap: 5px;
+                box-sizing: border-box;
             }
 
             .chat-container {
                 gap: 10px;
                 width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                /* Align chat bubbles to left */
             }
 
             /* Ensure split container is vertical */
@@ -801,11 +832,16 @@
             .split-col {
                 padding: 15px;
                 width: 100%;
+                box-sizing: border-box;
             }
 
             /* Fix for Agent Notification Card on Mobile */
             .card[style*="max-width: 600px"] {
                 padding: 15px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                /* Override inline max-width */
+                box-sizing: border-box;
             }
 
             /* Allow wrapping in notification header */
@@ -823,6 +859,13 @@
                 font-size: 0.75rem;
                 /* Smaller score text */
                 padding: 2px 8px;
+            }
+
+            /* Specific fix for top overlap on EN version of Slide 8 & 9 */
+            /* We can target the specific content divs if needed, or just rely on the increased container padding */
+            /* Adding a bit more top margin to the first h1 in content-en to be safe */
+            .content-en h1:first-child {
+                margin-top: 10px;
             }
         }
     </style>
