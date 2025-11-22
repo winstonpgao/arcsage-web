@@ -644,7 +644,7 @@
                 width: 100%;
                 min-height: 100dvh;
                 /* Use dvh for better mobile browser support */
-                padding: 70px 15px 20px;
+                padding: 90px 15px 20px;
                 /* Increased top padding to clear language toggle */
                 border-radius: 0;
                 /* Remove radius on full mobile */
@@ -794,11 +794,12 @@
                 justify-content: flex-end;
                 gap: 6px;
                 z-index: 1000;
-                background: rgba(0, 0, 0, 0.65);
-                padding: 4px 8px;
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                border-radius: 16px;
-                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+                background: rgba(0, 0, 0, 0.85);
+                backdrop-filter: blur(8px);
+                padding: 6px 10px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 20px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
             }
 
             .lang-btn {
