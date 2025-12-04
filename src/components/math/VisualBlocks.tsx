@@ -34,7 +34,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
   const maxBlocks = 60;
   const isLarge = isSubtraction ? num1 > maxBlocks : (num1 + num2) > maxBlocks;
 
-  // Calculate display numbers - scale down if too large
+  // Calculate display numbers - scale down if too large, preserving exact ratio
   let displayNum1 = num1;
   let displayNum2 = num2;
   let scaleFactor = 1;
@@ -46,10 +46,27 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
       displayNum1 = Math.round(num1 * scaleFactor);
       displayNum2 = Math.round(num2 * scaleFactor);
     } else {
-      // For addition, scale both numbers
-      scaleFactor = maxBlocks / (num1 + num2);
-      displayNum1 = Math.round(num1 * scaleFactor);
-      displayNum2 = Math.round(num2 * scaleFactor);
+      // For addition, scale both numbers preserving the exact ratio
+      // Find the GCD to simplify the ratio first
+      const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
+      const divisor = gcd(num1, num2);
+      const ratio1 = num1 / divisor;
+      const ratio2 = num2 / divisor;
+
+      // Scale the simplified ratio to fit within maxBlocks
+      const ratioSum = ratio1 + ratio2;
+      const multiplier = Math.floor(maxBlocks / ratioSum);
+
+      if (multiplier >= 1) {
+        displayNum1 = ratio1 * multiplier;
+        displayNum2 = ratio2 * multiplier;
+      } else {
+        // If ratio is too large, just use minimal representation
+        displayNum1 = Math.max(1, Math.min(ratio1, maxBlocks - 1));
+        displayNum2 = Math.max(1, Math.min(ratio2, maxBlocks - displayNum1));
+      }
+
+      scaleFactor = displayNum1 / num1;
     }
   }
 
