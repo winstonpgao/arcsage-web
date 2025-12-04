@@ -349,9 +349,10 @@ function generateDecimalProblem(yearLevel: YearLevel, difficulty: Difficulty): M
 }
 
 function generatePercentageProblem(yearLevel: YearLevel, difficulty: Difficulty): MathProblem {
-  const percentages = difficulty === 'easy' ? [10, 50] : difficulty === 'medium' ? [10, 25, 50] : [10, 20, 25, 50, 75];
+  const percentages = difficulty === 'easy' ? [5, 10, 50] : difficulty === 'medium' ? [5, 10, 25, 50] : [5, 10, 20, 25, 50, 75];
   const percentage = percentages[randomInt(0, percentages.length - 1)];
-  const baseNumber = randomInt(2, 10) * 10; // Nice round numbers
+  // Use multiples of 20 for easier mental math (5% of 20 = 1, 5% of 100 = 5)
+  const baseNumber = randomInt(2, 10) * 20;
   const answer = (percentage / 100) * baseNumber;
 
   return {
