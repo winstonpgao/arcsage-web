@@ -3,24 +3,213 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #8b5cf6;
+  --primary-light: #a78bfa;
+  --primary-dark: #7c3aed;
+  --secondary: #ec4899;
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Theme: Purple (default) */
+[data-theme="purple"] {
+  --primary: #8b5cf6;
+  --primary-light: #a78bfa;
+  --primary-dark: #7c3aed;
+  --secondary: #ec4899;
+  --bg-gradient-from: #faf5ff;
+  --bg-gradient-via: #fdf2f8;
+  --bg-gradient-to: #fff7ed;
+  --visual-bg-from: #faf5ff;
+  --visual-bg-to: #f3e8ff;
+  --visual-border: #c4b5fd;
+  --visual-cell: #ddd6fe;
+  --visual-cell-hover: #c4b5fd;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Theme: Blue */
+[data-theme="blue"] {
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #2563eb;
+  --secondary: #06b6d4;
+  --bg-gradient-from: #eff6ff;
+  --bg-gradient-via: #ecfeff;
+  --bg-gradient-to: #f0fdf4;
+  --visual-bg-from: #eff6ff;
+  --visual-bg-to: #dbeafe;
+  --visual-border: #93c5fd;
+  --visual-cell: #bfdbfe;
+  --visual-cell-hover: #93c5fd;
+}
+
+/* Theme: Green */
+[data-theme="green"] {
+  --primary: #22c55e;
+  --primary-light: #4ade80;
+  --primary-dark: #16a34a;
+  --secondary: #14b8a6;
+  --bg-gradient-from: #f0fdf4;
+  --bg-gradient-via: #ecfeff;
+  --bg-gradient-to: #fefce8;
+  --visual-bg-from: #f0fdf4;
+  --visual-bg-to: #dcfce7;
+  --visual-border: #86efac;
+  --visual-cell: #bbf7d0;
+  --visual-cell-hover: #86efac;
+}
+
+/* Theme: Orange */
+[data-theme="orange"] {
+  --primary: #f97316;
+  --primary-light: #fb923c;
+  --primary-dark: #ea580c;
+  --secondary: #eab308;
+  --bg-gradient-from: #fff7ed;
+  --bg-gradient-via: #fefce8;
+  --bg-gradient-to: #fef2f2;
+  --visual-bg-from: #fff7ed;
+  --visual-bg-to: #fed7aa;
+  --visual-border: #fdba74;
+  --visual-cell: #fed7aa;
+  --visual-cell-hover: #fdba74;
+}
+
+/* Theme: Pink */
+[data-theme="pink"] {
+  --primary: #ec4899;
+  --primary-light: #f472b6;
+  --primary-dark: #db2777;
+  --secondary: #a855f7;
+  --bg-gradient-from: #fdf2f8;
+  --bg-gradient-via: #faf5ff;
+  --bg-gradient-to: #fef2f2;
+  --visual-bg-from: #fdf2f8;
+  --visual-bg-to: #fbcfe8;
+  --visual-border: #f9a8d4;
+  --visual-cell: #fbcfe8;
+  --visual-cell-hover: #f9a8d4;
+}
+
+/* Force light mode - no dark mode for kid-friendly app */
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, var(--bg-gradient-from, #faf5ff) 0%, var(--bg-gradient-via, #fdf2f8) 50%, var(--bg-gradient-to, #fff7ed) 100%);
+  color: #171717;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Primary color utilities */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.from-primary {
+  --tw-gradient-from: var(--primary);
+}
+
+.to-primary {
+  --tw-gradient-to: var(--primary);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+
+.ring-primary {
+  --tw-ring-color: var(--primary);
+}
+
+/* Secondary color utilities */
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.border-secondary {
+  border-color: var(--secondary);
+}
+
+/* Visual component utilities */
+.visual-bg {
+  background: linear-gradient(135deg, var(--visual-bg-from) 0%, var(--visual-bg-to) 100%);
+  border-color: var(--visual-border);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-light, #c1c1c1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary, #a1a1a1);
+}
+
+/* Fun kid-friendly animations */
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes celebrate {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-5deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
+  75% { transform: scale(1.05) rotate(-3deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary-light); }
+  50% { box-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary-light); }
+}
+
+@keyframes confetti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s ease-out;
+}
+
+.animate-celebrate {
+  animation: celebrate 0.6s ease-in-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
