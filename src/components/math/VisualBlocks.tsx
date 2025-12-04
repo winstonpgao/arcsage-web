@@ -52,12 +52,14 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
       if (multiplier >= 1) {
         displayNum1 = ratio1 * multiplier;
         displayNum2 = ratio2 * multiplier;
+        scaleFactor = displayNum1 / num1;
       } else {
-        // Ratio too large, use minimal representation
-        displayNum1 = ratio1;
-        displayNum2 = ratio2;
+        // Ratio1 > maxBlocks (e.g., 98:5 coprime)
+        // Scale down proportionally to fit
+        scaleFactor = maxBlocks / num1;
+        displayNum1 = Math.round(num1 * scaleFactor);
+        displayNum2 = Math.max(1, Math.round(num2 * scaleFactor)); // At least 1
       }
-      scaleFactor = displayNum1 / num1;
     } else {
       // For addition, scale to fit sum within maxBlocks while preserving ratio
       const ratioSum = ratio1 + ratio2;
