@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["better-sqlite3"],
+  output: 'export',
+  basePath: isProd ? '/math' : '',
+  assetPrefix: isProd ? '/math/' : '',
+  images: {
+    unoptimized: true,
+  },
+  trailingSlash: true,
 };
 
 export default nextConfig;

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMathBuddyStore } from '@/lib/store';
 import { useSpeech } from '@/hooks/useSpeech';
+import { callLLM, LLMProvider } from '@/lib/llmClient';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import {
@@ -82,39 +83,28 @@ export function ChatInterface() {
     setIsChatLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [
-            ...chatMessages.map((m) => ({ role: m.role, content: m.content })),
-            { role: 'user', content: userMessage },
-          ],
-          problem: currentProblem,
-          studentName,
-          yearLevel,
-          apiKey: getActiveApiKey(),
-          provider: llmProvider,
-        }),
-      });
+      const messages = [
+        ...chatMessages.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content })),
+        { role: 'user' as const, content: userMessage },
+      ];
 
-      const data = await response.json();
+      const responseText = await callLLM(
+        llmProvider as LLMProvider,
+        getActiveApiKey() || '',
+        messages,
+        currentProblem,
+        studentName,
+        yearLevel
+      );
 
-      if (data.error) {
-        addChatMessage({
-          role: 'assistant',
-          content: `Sorry, I had trouble responding. ${data.error}`,
-        });
-      } else {
-        addChatMessage({ role: 'assistant', content: data.message });
-        if (voiceEnabled) {
-          speak(data.message);
-        }
+      addChatMessage({ role: 'assistant', content: responseText });
+      if (voiceEnabled) {
+        speak(responseText);
       }
-    } catch {
+    } catch (error) {
       addChatMessage({
         role: 'assistant',
-        content: "Oops! Something went wrong. Let's try again!",
+        content: `Sorry, I had trouble responding. ${error instanceof Error ? error.message : 'Please try again!'}`,
       });
     } finally {
       setIsChatLoading(false);
