@@ -40,20 +40,26 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
   let scaleFactor = 1;
 
   if (isLarge) {
-    if (isSubtraction) {
-      // For subtraction, scale to fit within maxBlocks
-      scaleFactor = maxBlocks / num1;
-      displayNum1 = Math.round(num1 * scaleFactor);
-      displayNum2 = Math.round(num2 * scaleFactor);
-    } else {
-      // For addition, scale both numbers preserving the exact ratio
-      // Find the GCD to simplify the ratio first
-      const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
-      const divisor = gcd(num1, num2);
-      const ratio1 = num1 / divisor;
-      const ratio2 = num2 / divisor;
+    // Use GCD to preserve exact ratio for both addition and subtraction
+    const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
+    const divisor = gcd(num1, num2);
+    const ratio1 = num1 / divisor;
+    const ratio2 = num2 / divisor;
 
-      // Scale the simplified ratio to fit within maxBlocks
+    if (isSubtraction) {
+      // For subtraction, scale to fit num1 within maxBlocks while preserving ratio
+      const multiplier = Math.floor(maxBlocks / ratio1);
+      if (multiplier >= 1) {
+        displayNum1 = ratio1 * multiplier;
+        displayNum2 = ratio2 * multiplier;
+      } else {
+        // Ratio too large, use minimal representation
+        displayNum1 = ratio1;
+        displayNum2 = ratio2;
+      }
+      scaleFactor = displayNum1 / num1;
+    } else {
+      // For addition, scale to fit sum within maxBlocks while preserving ratio
       const ratioSum = ratio1 + ratio2;
       const multiplier = Math.floor(maxBlocks / ratioSum);
 
