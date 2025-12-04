@@ -63,6 +63,18 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
     setGroupCounts(prev => {
       const newCounts = [...prev];
       newCounts[groupIdx] = prev[groupIdx] + 1;
+
+      // Auto-add a new group if this group just became full and we haven't reached target
+      const justBecameFull = newCounts[groupIdx] === displayItemsPerGroup;
+      const isLastGroup = groupIdx === newCounts.length - 1;
+      const canAddMore = newCounts.length < targetGroups;
+
+      if (justBecameFull && isLastGroup && canAddMore) {
+        // Add a new empty group
+        setNumGroups(n => n + 1);
+        return [...newCounts, 0];
+      }
+
       return newCounts;
     });
   };
