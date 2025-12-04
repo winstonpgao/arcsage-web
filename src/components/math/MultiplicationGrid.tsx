@@ -18,27 +18,25 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
   const [currentStep, setCurrentStep] = useState(-1);
 
   // num1 × num2 = num1 groups, each with num2 items
-  // Example: 6 × 7 = 6 groups of 7
+  // Example: 9 × 8 = 9 groups of 8
   const targetGroups = num1;
   const itemsPerGroup = num2;
 
-  // For large numbers, scale down
-  const isLarge = answer > 48;
-  const displayGroups = isLarge ? Math.min(targetGroups, 6) : targetGroups;
-  const displayItemsPerGroup = isLarge ? Math.min(itemsPerGroup, 8) : itemsPerGroup;
-  const displayAnswer = displayGroups * displayItemsPerGroup;
+  // For display, limit items per group to 10 max for visual clarity
+  const displayItemsPerGroup = Math.min(itemsPerGroup, 10);
 
-  // Each group tracks how many items it has (0 to itemsPerGroup)
-  const [groupCounts, setGroupCounts] = useState<number[]>(() =>
-    Array(displayGroups).fill(0)
-  );
+  // Track number of groups (start with 1, user can add more up to targetGroups)
+  const [numGroups, setNumGroups] = useState(1);
+
+  // Each group tracks how many items it has (0 to displayItemsPerGroup)
+  const [groupCounts, setGroupCounts] = useState<number[]>(() => [0]);
 
   // Steps for learning
   const steps = [
     { text: `${num1} × ${num2} means ${num1} groups of ${num2}` },
-    { text: `We start with ${displayGroups} empty groups` },
-    { text: `Tap + to add items to each group` },
-    { text: `Each group needs ${displayItemsPerGroup} items` },
+    { text: `Start by making groups. Tap "+ New Group" to add groups!` },
+    { text: `Tap + to add ${displayItemsPerGroup} items to each group` },
+    { text: `Make ${targetGroups} groups, each with ${itemsPerGroup} items` },
     { text: `Count all: ${targetGroups} × ${itemsPerGroup} = ${answer}!` },
   ];
 
@@ -50,6 +48,13 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
       setCurrentStep(nextStep);
       speak(steps[nextStep].text);
     }
+  };
+
+  // Add a new group
+  const addNewGroup = () => {
+    if (numGroups >= targetGroups) return; // Can't exceed target
+    setNumGroups(prev => prev + 1);
+    setGroupCounts(prev => [...prev, 0]);
   };
 
   // Add one item to a group
@@ -74,19 +79,22 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
 
   // Reset everything
   const resetAll = () => {
-    setGroupCounts(Array(displayGroups).fill(0));
+    setNumGroups(1);
+    setGroupCounts([0]);
     setCurrentStep(-1);
   };
 
-  // Auto-fill demonstration
+  // Auto-fill demonstration - create all groups and fill them
   const autoFill = () => {
-    setGroupCounts(Array(displayGroups).fill(displayItemsPerGroup));
+    setNumGroups(targetGroups);
+    setGroupCounts(Array(targetGroups).fill(displayItemsPerGroup));
     speak(`Done! ${targetGroups} groups of ${itemsPerGroup} equals ${answer}!`);
   };
 
   const fullGroupsCount = groupCounts.filter(c => c === displayItemsPerGroup).length;
   const totalItemsPlaced = groupCounts.reduce((sum, c) => sum + c, 0);
-  const isComplete = fullGroupsCount === displayGroups;
+  // Complete when we have all groups and all are full
+  const isComplete = numGroups === targetGroups && fullGroupsCount === targetGroups;
 
   return (
     <div
@@ -126,7 +134,9 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
               ? steps[currentStep].text
               : isComplete
                 ? `${fullGroupsCount} groups × ${displayItemsPerGroup} = ${totalItemsPlaced}!`
-                : `Add ${displayItemsPerGroup} items to each of the ${displayGroups} groups!`}
+                : numGroups < targetGroups
+                  ? `Make ${targetGroups} groups! (${numGroups}/${targetGroups} created)`
+                  : `Fill each group with ${displayItemsPerGroup} items!`}
           </span>
           <button
             onClick={() => speak(isStepActive ? steps[currentStep].text : `${num1} times ${num2} means ${targetGroups} groups of ${itemsPerGroup}`)}
@@ -160,22 +170,33 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
         </div>
       </div>
 
-      {/* Large number notice */}
-      {isLarge && (
+      {/* Large number notice - only show if items per group is scaled */}
+      {itemsPerGroup > 10 && (
         <div className="mb-3 p-2 bg-yellow-50 rounded-lg border border-yellow-200">
           <p className="text-yellow-700 text-sm text-center">
-            📐 Showing {displayGroups} × {displayItemsPerGroup} = {displayAnswer} to demonstrate.
+            📐 Each group shows {displayItemsPerGroup} items (scaled from {itemsPerGroup}).
             <br />
             <strong>Real answer: {num1} × {num2} = {answer}</strong>
           </p>
         </div>
       )}
 
-      {/* Groups area - all groups shown from start */}
+      {/* Groups area */}
       <div className="p-4 bg-white/70 rounded-xl">
-        <p className="text-gray-600 font-bold mb-3">
-          {displayGroups} Groups (tap + to add items):
-        </p>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-gray-600 font-bold">
+            {numGroups}/{targetGroups} Groups (tap + to add items):
+          </p>
+          {numGroups < targetGroups && (
+            <button
+              onClick={addNewGroup}
+              className="flex items-center gap-1 px-3 py-1 text-sm bg-secondary text-white rounded-full hover:bg-secondary/80 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              New Group
+            </button>
+          )}
+        </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {groupCounts.map((count, groupIdx) => {
@@ -295,17 +316,17 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
         <p className="text-gray-600 text-center mb-2 font-medium">Progress:</p>
         <div className="flex items-center justify-center gap-4 flex-wrap">
           <div className="text-center">
-            <p className="text-3xl font-bold text-green-600">{fullGroupsCount}</p>
+            <p className="text-3xl font-bold text-green-600">{fullGroupsCount}/{targetGroups}</p>
             <p className="text-sm text-gray-500">Full groups</p>
           </div>
           <div className="text-4xl text-gray-300">×</div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-secondary">{displayItemsPerGroup}</p>
+            <p className="text-3xl font-bold text-secondary">{itemsPerGroup}</p>
             <p className="text-sm text-gray-500">Items each</p>
           </div>
           <div className="text-4xl text-gray-300">=</div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-primary">{totalItemsPlaced}</p>
+            <p className="text-3xl font-bold text-primary">{fullGroupsCount * itemsPerGroup}</p>
             <p className="text-sm text-gray-500">Total items</p>
           </div>
         </div>
