@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronRight, RotateCcw } from 'lucide-react';
 import { useSpeech } from '@/hooks/useSpeech';
@@ -111,32 +111,117 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
 
   const [countingAreaBlocks, setCountingAreaBlocks] = useState<Block[]>([]);
 
-  // Handle block click to move to/from counting area
-  const handleBlockClick = (block: Block) => {
-    if (showResult) return;
+  // Drag selection state
+  const [dragStartId, setDragStartId] = useState<string | null>(null);
+  const [dragCurrentId, setDragCurrentId] = useState<string | null>(null);
+  const [dragTargetState, setDragTargetState] = useState<boolean>(false); // true = add/remove, false = revert
 
+  // Helper to parse block ID
+  const parseBlockId = (id: string) => {
+    const [group, indexStr] = id.split('-');
+    return { group, index: parseInt(indexStr, 10) };
+  };
+
+  // Get range of blocks between start and current
+  const getSelectionRange = (start: string, current: string) => {
+    const startInfo = parseBlockId(start);
+    const currentInfo = parseBlockId(current);
+
+    // Must be in same group
+    if (startInfo.group !== currentInfo.group) return [start];
+
+    const min = Math.min(startInfo.index, currentInfo.index);
+    const max = Math.max(startInfo.index, currentInfo.index);
+
+    const rangeIds: string[] = [];
+    for (let i = min; i <= max; i++) {
+      rangeIds.push(`${startInfo.group}-${i}`);
+    }
+    return rangeIds;
+  };
+
+  // Handle pointer down to start drag
+  const handlePointerDown = (e: React.PointerEvent, block: Block) => {
+    if (showResult) return;
+    e.preventDefault(); // Prevent scrolling on touch
+
+    setDragStartId(block.id);
+    setDragCurrentId(block.id);
+
+    // Determine target state based on start block
     if (isSubtraction) {
-      // For subtraction, toggle removed state
-      setBlocks(blocks.map(b =>
-        b.id === block.id ? { ...b, removed: !b.removed } : b
-      ));
+      setDragTargetState(!block.removed);
     } else {
-      // For addition, move to counting area
-      if (block.inCountingArea) {
-        // Move back to original position
-        setCountingAreaBlocks(countingAreaBlocks.filter(b => b.id !== block.id));
-        setBlocks(blocks.map(b =>
-          b.id === block.id ? { ...b, inCountingArea: false } : b
+      setDragTargetState(!block.inCountingArea);
+    }
+  };
+
+  // Handle global pointer move and up
+  useEffect(() => {
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!dragStartId) return;
+      e.preventDefault();
+
+      // Find element under pointer
+      const element = document.elementFromPoint(e.clientX, e.clientY);
+      const blockButton = element?.closest('button[data-block-id]');
+
+      if (blockButton) {
+        const id = blockButton.getAttribute('data-block-id');
+        if (id) setDragCurrentId(id);
+      }
+    };
+
+    const handlePointerUp = () => {
+      if (!dragStartId || !dragCurrentId) {
+        setDragStartId(null);
+        setDragCurrentId(null);
+        return;
+      }
+
+      const range = getSelectionRange(dragStartId, dragCurrentId);
+
+      if (isSubtraction) {
+        setBlocks(prev => prev.map(b =>
+          range.includes(b.id) ? { ...b, removed: dragTargetState } : b
         ));
       } else {
-        // Move to counting area
-        const updatedBlock = { ...block, inCountingArea: true };
-        setCountingAreaBlocks([...countingAreaBlocks, updatedBlock]);
-        setBlocks(blocks.map(b =>
-          b.id === block.id ? { ...b, inCountingArea: true } : b
-        ));
+        // For addition, we need to handle moving to/from counting area
+        setBlocks(prev => {
+          const newBlocks = prev.map(b =>
+            range.includes(b.id) ? { ...b, inCountingArea: dragTargetState } : b
+          );
+
+          // Sync countingAreaBlocks
+          const newCounting = newBlocks.filter(b => b.inCountingArea);
+          setCountingAreaBlocks(newCounting);
+
+          return newBlocks;
+        });
       }
+
+      setDragStartId(null);
+      setDragCurrentId(null);
+    };
+
+    if (dragStartId) {
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+      window.addEventListener('pointercancel', handlePointerUp);
     }
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
+    };
+  }, [dragStartId, dragCurrentId, dragTargetState, isSubtraction, showResult]);
+
+  // Handle block click (fallback for simple click, though pointer events cover it)
+  const handleBlockClick = (block: Block) => {
+    // We let the pointer events handle this now to avoid double firing
+    // But we keep this empty or remove it if we fully switch to pointer events
+    // For safety, we can leave it empty or remove calls to it
   };
 
   // Move all blocks to counting area
@@ -199,7 +284,24 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
 
   // Render a single block
   const renderBlock = (block: Block) => {
-    const isRemoved = block.removed;
+    // Determine if this block is currently being selected/modified in a drag
+    let isRemoved = block.removed;
+    let isInCounting = block.inCountingArea;
+
+    if (dragStartId && dragCurrentId) {
+      const range = getSelectionRange(dragStartId, dragCurrentId);
+      if (range.includes(block.id)) {
+        if (isSubtraction) {
+          isRemoved = dragTargetState;
+        } else {
+          isInCounting = dragTargetState;
+        }
+      }
+    }
+
+    // For addition, if we are looking at the "pool" blocks, they should disappear if in counting area
+    // For counting area blocks, they are always visible there
+
     const colorClass = block.color === 'primary'
       ? 'var(--primary, #3b82f6)'
       : 'var(--secondary, #06b6d4)';
@@ -207,6 +309,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
     return (
       <motion.button
         key={block.id}
+        data-block-id={block.id} // Important for drag detection
         layout
         initial={{ scale: 0 }}
         animate={{
@@ -215,10 +318,10 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
         }}
         whileHover={{ scale: isRemoved ? 0.6 : 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={() => handleBlockClick(block)}
+        onPointerDown={(e) => handlePointerDown(e, block)}
         disabled={showResult}
         className={`w-10 h-10 rounded-lg shadow-md flex items-center justify-center font-bold text-white transition-all cursor-pointer ${isRemoved ? 'line-through' : 'hover:ring-2 hover:ring-white'
-          }`}
+          } touch-none select-none`} // touch-none prevents scrolling while dragging
         style={{ backgroundColor: isRemoved ? '#d1d5db' : colorClass }}
       >
         {showBlockNumbers && <span className="text-xs">{block.num}</span>}
@@ -379,12 +482,13 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
                 {countingAreaBlocks.slice(rowIndex * 10, (rowIndex + 1) * 10).map((block, i) => (
                   <motion.button
                     key={block.id}
+                    data-block-id={block.id} // Add ID for drag
                     layout
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     whileHover={{ scale: 1.1 }}
-                    onClick={() => handleBlockClick(block)}
-                    className="w-10 h-10 rounded-lg shadow-md flex items-center justify-center font-bold text-white cursor-pointer hover:ring-2 hover:ring-white"
+                    onPointerDown={(e) => handlePointerDown(e, block)}
+                    className="w-10 h-10 rounded-lg shadow-md flex items-center justify-center font-bold text-white cursor-pointer hover:ring-2 hover:ring-white touch-none select-none"
                     style={{
                       backgroundColor: block.color === 'primary'
                         ? 'var(--primary, #3b82f6)'
