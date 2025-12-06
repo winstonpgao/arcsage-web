@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronRight, RotateCcw, Check } from 'lucide-react';
 import { useSpeech } from '@/hooks/useSpeech';
@@ -15,7 +15,8 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
   const { speak } = useSpeech();
   const [currentStep, setCurrentStep] = useState(-1);
   const [selectedAnswer, setSelectedAnswer] = useState<number | string | null>(null);
-  const [draggedItem, setDraggedItem] = useState<number | string | null>(null);
+  const [isDraggingBar, setIsDraggingBar] = useState(false);
+  const barContainerRef = useRef<HTMLDivElement>(null);
 
   // Find the blank position (marked as '?' or null)
   const blankIndex = pattern.findIndex(p => p === '?' || p === null);
@@ -24,35 +25,7 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
   // Get numeric values for grid display
   const nums = pattern.filter(p => typeof p === 'number') as number[];
   const maxNum = Math.max(...nums, Number(answer) || 0);
-  const gridMax = maxNum + 2; // No cap - use horizontal scrolling instead
-
-  // Generate answer options
-  const generateOptions = () => {
-    const correctAnswer = Number(answer);
-    const options = new Set<number>();
-    options.add(correctAnswer);
-
-    // Find the pattern difference
-    let diff = 0;
-    if (nums.length >= 2) {
-      diff = nums[1] - nums[0];
-    }
-
-    // Add plausible wrong answers
-    options.add(correctAnswer + diff);
-    options.add(correctAnswer - diff);
-    options.add(correctAnswer + 1);
-    options.add(correctAnswer - 1);
-    options.add(correctAnswer * 2);
-
-    // Filter to reasonable positive numbers and limit to 4
-    return Array.from(options)
-      .filter(n => n >= 0 && n !== correctAnswer || n === correctAnswer)
-      .slice(0, 4)
-      .sort(() => Math.random() - 0.5);
-  };
-
-  const [options] = useState(generateOptions);
+  const gridMax = maxNum + 2;
 
   // Detect pattern type and difference
   const detectPatternInfo = () => {
@@ -67,7 +40,6 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
       return { type: 'same number', diff: 0 };
     }
 
-    // Check for multiplication pattern
     if (nums.length >= 2 && nums[0] !== 0) {
       const ratio = nums[1] / nums[0];
       const allSameRatio = nums.every((n, i) => i === 0 || n / nums[i - 1] === ratio);
@@ -85,7 +57,7 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
   const steps = [
     { text: `Look at this pattern: ${pattern.filter(p => p !== '?').join(', ')}` },
     { text: `This pattern is ${patternType}` },
-    { text: `What number comes next? Drag an answer to the empty box!` },
+    { text: `Drag the red bar to set your answer!` },
   ];
 
   const isStepActive = currentStep >= 0;
@@ -102,32 +74,50 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
   const resetAll = () => {
     setSelectedAnswer(null);
     setCurrentStep(-1);
-    setDraggedItem(null);
   };
 
-  const handleDragStart = (value: number | string) => {
-    setDraggedItem(value);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedItem(null);
-  };
-
-  const handleDrop = () => {
-    if (draggedItem !== null) {
-      setSelectedAnswer(draggedItem);
-      setDraggedItem(null);
-    }
-  };
-
-  const handleOptionClick = (value: number | string) => {
-    setSelectedAnswer(value);
-  };
-
-  const showAnswer = () => {
+  const showAnswerFn = () => {
     setSelectedAnswer(answer);
     speak(`The answer is ${answer}!`);
   };
+
+  // Handle bar dragging
+  const handleBarDragStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    setIsDraggingBar(true);
+  }, []);
+
+  const handleBarDragMove = useCallback((e: MouseEvent | TouchEvent) => {
+    if (!isDraggingBar || !barContainerRef.current) return;
+    e.preventDefault();
+
+    const rect = barContainerRef.current.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const relX = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, relX / rect.width));
+    const newValue = Math.round(percentage * gridMax);
+    setSelectedAnswer(newValue);
+  }, [isDraggingBar, gridMax]);
+
+  const handleBarDragEnd = useCallback(() => {
+    setIsDraggingBar(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDraggingBar) {
+      document.addEventListener('mousemove', handleBarDragMove);
+      document.addEventListener('mouseup', handleBarDragEnd);
+      document.addEventListener('touchmove', handleBarDragMove, { passive: false });
+      document.addEventListener('touchend', handleBarDragEnd);
+
+      return () => {
+        document.removeEventListener('mousemove', handleBarDragMove);
+        document.removeEventListener('mouseup', handleBarDragEnd);
+        document.removeEventListener('touchmove', handleBarDragMove);
+        document.removeEventListener('touchend', handleBarDragEnd);
+      };
+    }
+  }, [isDraggingBar, handleBarDragMove, handleBarDragEnd]);
 
   return (
     <div
@@ -140,9 +130,7 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
       {/* Header */}
       <div className="mb-4 p-3 bg-white rounded-xl shadow-sm">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-lg font-bold text-primary">
-            Complete the Pattern
-          </p>
+          <p className="text-lg font-bold text-primary">Complete the Pattern</p>
           <div className="flex gap-2">
             <button
               onClick={resetAll}
@@ -152,7 +140,7 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
               Reset
             </button>
             <button
-              onClick={showAnswer}
+              onClick={showAnswerFn}
               className="px-3 py-1 text-sm bg-green-100 text-green-700 hover:bg-green-200 rounded-full transition-colors"
             >
               Show Me
@@ -167,10 +155,10 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
               ? steps[currentStep].text
               : isCorrect
                 ? `Correct! The pattern is ${patternType}`
-                : 'Drag the correct number to complete the pattern!'}
+                : 'Drag the red bar left or right to set your answer!'}
           </span>
           <button
-            onClick={() => speak(isStepActive ? steps[currentStep].text : `Complete the pattern by dragging the right number`)}
+            onClick={() => speak(isStepActive ? steps[currentStep].text : 'Drag the red bar to set your answer')}
             className="p-1 hover:bg-blue-100 rounded-full"
           >
             <Volume2 className="w-4 h-4 text-blue-600" />
@@ -203,9 +191,8 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
 
       {/* Bar Chart Visual */}
       <div className="p-3 bg-white/70 rounded-xl mb-4">
-        <p className="text-gray-600 font-bold mb-3 text-center text-sm">Pattern on Bar Chart:</p>
+        <p className="text-gray-600 font-bold mb-3 text-center text-sm">Drag the red bar to set answer:</p>
 
-        {/* Horizontal bar chart */}
         <div className="space-y-2">
           {pattern.map((item, rowIdx) => {
             const isBlank = item === '?' || item === null;
@@ -227,20 +214,17 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
                   {isBlank ? '?' : item}
                 </div>
 
-                {/* Bar container */}
+                {/* Bar container - draggable for blank row */}
                 <div
-                  className="flex-1 h-10 bg-gray-100 rounded-lg overflow-hidden relative cursor-pointer border-2 border-gray-300"
-                  onClick={() => {
-                    if (isBlank) {
-                      // Cycle through possible answers on click
-                      const currentVal = selectedAnswer !== null ? Number(selectedAnswer) : 0;
-                      const nextVal = currentVal + 1 > gridMax ? 1 : currentVal + 1;
-                      setSelectedAnswer(nextVal);
-                    }
-                  }}
+                  ref={isBlank ? barContainerRef : undefined}
+                  className={`flex-1 h-10 bg-gray-100 rounded-lg overflow-hidden relative border-2 border-gray-300 ${
+                    isBlank ? 'cursor-ew-resize' : ''
+                  }`}
+                  onMouseDown={isBlank ? handleBarDragStart : undefined}
+                  onTouchStart={isBlank ? handleBarDragStart : undefined}
                 >
                   {/* Grid lines */}
-                  <div className="absolute inset-0 flex">
+                  <div className="absolute inset-0 flex pointer-events-none">
                     {Array.from({ length: gridMax }, (_, i) => (
                       <div
                         key={`grid-${i}`}
@@ -250,19 +234,20 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
                     ))}
                   </div>
 
-                  {/* The bar - much more visible colors */}
+                  {/* The bar */}
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${barWidth}%` }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className={`h-full rounded-md flex items-center justify-end pr-3 shadow-md ${
+                    animate={{ width: isDraggingBar && isBlank ? undefined : `${barWidth}%` }}
+                    style={isDraggingBar && isBlank ? { width: `${barWidth}%` } : undefined}
+                    transition={isDraggingBar ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
+                    className={`h-full rounded-md flex items-center justify-end pr-2 shadow-md ${
                       isBlank
                         ? showAsCorrect
                           ? 'bg-gradient-to-r from-green-500 to-green-600'
                           : showAsWrong
                             ? 'bg-gradient-to-r from-red-500 to-red-600'
                             : value !== null
-                              ? 'bg-gradient-to-r from-orange-400 to-orange-500'
+                              ? 'bg-gradient-to-r from-red-500 to-red-600'
                               : 'bg-gray-300'
                         : 'bg-gradient-to-r from-blue-500 to-purple-600'
                     }`}
@@ -274,10 +259,10 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
                     )}
                   </motion.div>
 
-                  {/* Click hint for blank row */}
+                  {/* Drag hint for blank row */}
                   {isBlank && value === null && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm font-medium">tap to set value</span>
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="text-gray-500 text-sm font-medium">← drag to set value →</span>
                     </div>
                   )}
                 </div>
@@ -294,43 +279,9 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
             );
           })}
         </div>
-
-        {/* Interactive slider for answer (only when blank exists) */}
-        {hasBlank && (
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-            <p className="text-blue-700 font-medium text-sm text-center mb-2">
-              Slide to set the answer:
-            </p>
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-bold text-gray-500">0</span>
-              <input
-                type="range"
-                min="0"
-                max={gridMax}
-                value={selectedAnswer !== null ? Number(selectedAnswer) : 0}
-                onChange={(e) => setSelectedAnswer(Number(e.target.value))}
-                className="flex-1 h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-secondary"
-              />
-              <span className="text-sm font-bold text-gray-500">{gridMax}</span>
-              <span className="text-lg font-bold text-secondary min-w-[3rem] text-center">
-                {selectedAnswer !== null ? selectedAnswer : '?'}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Pattern explanation */}
-        <div className="mt-3 p-2 bg-blue-50 rounded-lg text-center">
-          <p className="text-blue-700 font-medium text-sm">
-            {hasBlank ? 'Use the slider or tap the bar to set the answer!' : 'See the pattern grow!'}
-            {patternInfo.diff !== 0 && (
-              <span className="font-bold"> (+{Math.abs(patternInfo.diff)} each step)</span>
-            )}
-          </p>
-        </div>
       </div>
 
-      {/* Pattern sequence display - compact */}
+      {/* Pattern sequence display */}
       <div className="p-3 bg-white/70 rounded-xl mb-4">
         <p className="text-gray-600 font-bold mb-3 text-center text-sm">Pattern Sequence:</p>
         <div className="flex flex-wrap gap-2 justify-center items-center">
@@ -351,8 +302,6 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
               >
                 {isBlank ? (
                   <motion.div
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDrop}
                     className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-base font-bold transition-all ${
                       showAsCorrect
                         ? 'bg-green-100 border-green-500 text-green-700'
@@ -362,9 +311,6 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
                             ? 'bg-secondary/20 border-secondary text-secondary'
                             : 'bg-gray-100 border-dashed border-gray-400 text-gray-400'
                     }`}
-                    animate={{
-                      scale: draggedItem !== null ? 1.1 : 1,
-                    }}
                   >
                     {displayValue !== null ? displayValue : '?'}
                     {showAsCorrect && <Check className="w-3 h-3 ml-0.5" />}
@@ -378,7 +324,6 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
                   </motion.div>
                 )}
 
-                {/* Arrow between items */}
                 {idx < pattern.length - 1 && (
                   <span className="text-gray-400 text-sm">→</span>
                 )}
@@ -387,7 +332,6 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
           })}
         </div>
 
-        {/* Show pattern step info */}
         {patternInfo.diff !== 0 && (
           <div className="mt-2 flex justify-center gap-1 flex-wrap">
             {pattern.slice(0, -1).map((_, idx) => (
@@ -397,44 +341,6 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
             ))}
           </div>
         )}
-      </div>
-
-      {/* Answer options - draggable */}
-      <div className="p-3 bg-white/70 rounded-xl">
-        <p className="text-gray-600 font-bold mb-3 text-center text-sm">
-          Drag or tap the correct answer:
-        </p>
-        <div className="flex flex-wrap gap-2 justify-center">
-          {options.map((option, idx) => {
-            const isSelected = selectedAnswer === option;
-            const isThisCorrect = String(option) === String(answer);
-
-            return (
-              <motion.button
-                key={idx}
-                layout
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ delay: idx * 0.05 }}
-                draggable
-                onDragStart={() => handleDragStart(option)}
-                onDragEnd={handleDragEnd}
-                onClick={() => handleOptionClick(option)}
-                className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg font-bold shadow-md cursor-grab active:cursor-grabbing transition-all ${
-                  isSelected
-                    ? isThisCorrect
-                      ? 'bg-green-500 text-white ring-2 ring-green-300'
-                      : 'bg-red-400 text-white ring-2 ring-red-300'
-                    : 'bg-secondary text-white hover:ring-2 hover:ring-secondary/30'
-                } ${draggedItem === option ? 'opacity-50 scale-90' : ''}`}
-              >
-                {option}
-              </motion.button>
-            );
-          })}
-        </div>
       </div>
 
       {/* Pattern explanation */}
@@ -471,8 +377,8 @@ export function PatternVisual({ pattern, answer, showResult }: PatternVisualProp
           <span className="text-gray-600">Pattern number</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-secondary" />
-          <span className="text-gray-600">Answer option</span>
+          <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-red-500 to-red-600" />
+          <span className="text-gray-600">Drag to set answer</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-green-500" />

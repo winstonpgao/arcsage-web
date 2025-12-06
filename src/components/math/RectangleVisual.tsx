@@ -15,7 +15,7 @@ interface RectangleVisualProps {
 
 export function RectangleVisual({ length, width, showArea = true, showPerimeter = false, showResult = false }: RectangleVisualProps) {
   const [currentStep, setCurrentStep] = useState(-1);
-  const [countedCells, setCountedCells] = useState<Set<string>>(new Set());
+  const [countedCells, setCountedCells] = useState<Map<string, number>>(new Map()); // Map cell key to sequence number
   const { speak } = useSpeech();
 
   // Drag selection state
@@ -66,35 +66,37 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
 
   const resetSteps = () => {
     setCurrentStep(-1);
-    setCountedCells(new Set());
+    setCountedCells(new Map());
   };
 
   const handleCellClick = (row: number, col: number) => {
     const key = `${row}-${col}`;
-    const newCounted = new Set(countedCells);
+    const newCounted = new Map(countedCells);
     if (newCounted.has(key)) {
       newCounted.delete(key);
+      // Renumber remaining cells
+      const entries = Array.from(newCounted.entries()).sort((a, b) => a[1] - b[1]);
+      newCounted.clear();
+      entries.forEach(([k], idx) => newCounted.set(k, idx + 1));
     } else {
-      newCounted.add(key);
+      const nextNum = newCounted.size + 1;
+      newCounted.set(key, nextNum);
       // Speak the count
-      speak(`${newCounted.size}`);
+      speak(`${nextNum}`);
     }
     setCountedCells(newCounted);
   };
 
   const countAllCells = () => {
-    const allCells = new Set<string>();
+    const allCells = new Map<string, number>();
+    let num = 1;
     for (let r = 0; r < displayWidth; r++) {
       for (let c = 0; c < displayLength; c++) {
-        allCells.add(`${r}-${c}`);
+        allCells.set(`${r}-${c}`, num++);
       }
     }
     setCountedCells(allCells);
     speak(`All ${totalCells} squares counted!`);
-  };
-
-  const getCellNumber = (row: number, col: number) => {
-    return row * displayLength + col + 1;
   };
 
   // Check if a cell is on the edge (for perimeter highlighting)
@@ -163,10 +165,15 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
   // Handle drag end
   const handleDragEnd = useCallback(() => {
     if (isDragging && dragStart && dragCurrent) {
-      // Add all cells in selection to counted
-      const newCounted = new Set(countedCells);
+      // Add all cells in selection to counted with sequence numbers
+      const newCounted = new Map(countedCells);
       const selectionCells = getCellsInDragSelection();
-      selectionCells.forEach(cell => newCounted.add(cell));
+      let nextNum = newCounted.size + 1;
+      selectionCells.forEach(cell => {
+        if (!newCounted.has(cell)) {
+          newCounted.set(cell, nextNum++);
+        }
+      });
       setCountedCells(newCounted);
 
       // Announce count
@@ -334,7 +341,6 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
             {Array.from({ length: displayWidth }).map((_, row) =>
               Array.from({ length: displayLength }).map((_, col) => {
                 const key = `${row}-${col}`;
-                const cellNum = getCellNumber(row, col);
                 const isCounted = countedCells.has(key);
                 const isInDragSelection = dragSelectionCells.has(key);
                 const highlightEdge = isStepActive && showPerimeter && isOnEdge(row, col, steps[currentStep]?.highlight);
@@ -374,7 +380,7 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
                       boxShadow: isCounted || isInDragSelection || highlightEdge ? '0 4px 6px rgba(0,0,0,0.15)' : 'none',
                     }}
                   >
-                    {isCounted ? '✓' : cellNum}
+                    {isCounted ? countedCells.get(key) : ''}
                   </motion.div>
                 );
               })
