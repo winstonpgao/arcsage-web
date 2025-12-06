@@ -114,6 +114,8 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
   // Drag selection state
   const [dragStartId, setDragStartId] = useState<string | null>(null);
   const [dragCurrentId, setDragCurrentId] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPoint, setDragStartPoint] = useState<{ x: number; y: number } | null>(null);
   const [dragTargetState, setDragTargetState] = useState<boolean>(false); // true = add/remove, false = revert
 
   // Helper to parse block ID
@@ -140,15 +142,19 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
     return rangeIds;
   };
 
-  // Handle pointer down to start drag
+  // Handle pointer down to start interaction
   const handlePointerDown = (e: React.PointerEvent, block: Block) => {
     if (showResult) return;
-    e.preventDefault(); // Prevent scrolling on touch
+    // We don't prevent default immediately to allow potential scrolling if it's not a drag
+    // But for blocks, we usually want to prevent default to stop text selection/scrolling if we intend to drag
+    // We'll use touch-action: none in CSS to handle scrolling behavior better
 
     setDragStartId(block.id);
     setDragCurrentId(block.id);
+    setDragStartPoint({ x: e.clientX, y: e.clientY });
+    setIsDragging(false);
 
-    // Determine target state based on start block
+    // Determine target state based on start block (for drag preview)
     if (isSubtraction) {
       setDragTargetState(!block.removed);
     } else {
@@ -159,49 +165,96 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
   // Handle global pointer move and up
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
-      if (!dragStartId) return;
-      e.preventDefault();
+      if (!dragStartId || !dragStartPoint) return;
 
-      // Find element under pointer
-      const element = document.elementFromPoint(e.clientX, e.clientY);
-      const blockButton = element?.closest('button[data-block-id]');
+      // Calculate distance moved
+      const dx = e.clientX - dragStartPoint.x;
+      const dy = e.clientY - dragStartPoint.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (blockButton) {
-        const id = blockButton.getAttribute('data-block-id');
-        if (id) setDragCurrentId(id);
+      // If moved more than 5px, consider it a drag
+      if (distance > 5 && !isDragging) {
+        setIsDragging(true);
+      }
+
+      // If dragging, update current target
+      if (distance > 5 || isDragging) {
+        e.preventDefault(); // Prevent scrolling once we are dragging
+        const element = document.elementFromPoint(e.clientX, e.clientY);
+        const blockButton = element?.closest('button[data-block-id]');
+
+        if (blockButton) {
+          const id = blockButton.getAttribute('data-block-id');
+          if (id) setDragCurrentId(id);
+        }
       }
     };
 
-    const handlePointerUp = () => {
-      if (!dragStartId || !dragCurrentId) {
-        setDragStartId(null);
-        setDragCurrentId(null);
-        return;
-      }
+    const handlePointerUp = (e: PointerEvent) => {
+      if (!dragStartId) return;
 
-      const range = getSelectionRange(dragStartId, dragCurrentId);
+      if (isDragging && dragCurrentId) {
+        // Handle Drag Selection
+        const range = getSelectionRange(dragStartId, dragCurrentId);
 
-      if (isSubtraction) {
-        setBlocks(prev => prev.map(b =>
-          range.includes(b.id) ? { ...b, removed: dragTargetState } : b
-        ));
+        if (isSubtraction) {
+          setBlocks(prev => prev.map(b =>
+            range.includes(b.id) ? { ...b, removed: dragTargetState } : b
+          ));
+        } else {
+          setBlocks(prev => {
+            const newBlocks = prev.map(b =>
+              range.includes(b.id) ? { ...b, inCountingArea: dragTargetState } : b
+            );
+            // Sync countingAreaBlocks
+            setCountingAreaBlocks(newBlocks.filter(b => b.inCountingArea));
+            return newBlocks;
+          });
+        }
       } else {
-        // For addition, we need to handle moving to/from counting area
-        setBlocks(prev => {
-          const newBlocks = prev.map(b =>
-            range.includes(b.id) ? { ...b, inCountingArea: dragTargetState } : b
-          );
+        // Handle Single Click (Toggle)
+        // We use dragStartId because dragCurrentId might not have updated if no move
+        const targetId = dragStartId;
 
-          // Sync countingAreaBlocks
-          const newCounting = newBlocks.filter(b => b.inCountingArea);
-          setCountingAreaBlocks(newCounting);
+        if (isSubtraction) {
+          setBlocks(prev => prev.map(b =>
+            b.id === targetId ? { ...b, removed: !b.removed } : b
+          ));
+        } else {
+          setBlocks(prev => {
+            // Check current state of the block to toggle it correctly
+            const targetBlock = prev.find(b => b.id === targetId);
+            if (!targetBlock) return prev;
 
-          return newBlocks;
-        });
+            const newInCounting = !targetBlock.inCountingArea;
+
+            const newBlocks = prev.map(b =>
+              b.id === targetId ? { ...b, inCountingArea: newInCounting } : b
+            );
+
+            // Sync countingAreaBlocks
+            if (newInCounting) {
+              // Add to counting area (append) - wait, we need to reconstruct from blocks to keep order or just append?
+              // The original logic appended. But syncing from filter is safer for consistency.
+              // However, original logic for addition:
+              // "Move to counting area" -> append
+              // "Move back" -> filter
+              // Let's stick to syncing from the main blocks array to ensure consistency
+              setCountingAreaBlocks(newBlocks.filter(b => b.inCountingArea));
+            } else {
+              setCountingAreaBlocks(prevCounting => prevCounting.filter(b => b.id !== targetId));
+            }
+
+            return newBlocks;
+          });
+        }
       }
 
+      // Reset state
       setDragStartId(null);
       setDragCurrentId(null);
+      setDragStartPoint(null);
+      setIsDragging(false);
     };
 
     if (dragStartId) {
@@ -215,13 +268,11 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
     };
-  }, [dragStartId, dragCurrentId, dragTargetState, isSubtraction, showResult]);
+  }, [dragStartId, dragCurrentId, dragStartPoint, isDragging, dragTargetState, isSubtraction]);
 
-  // Handle block click (fallback for simple click, though pointer events cover it)
+  // Handle block click - NO-OP now as we handle it in pointerUp
   const handleBlockClick = (block: Block) => {
-    // We let the pointer events handle this now to avoid double firing
-    // But we keep this empty or remove it if we fully switch to pointer events
-    // For safety, we can leave it empty or remove calls to it
+    // Left empty intentionally
   };
 
   // Move all blocks to counting area
@@ -288,7 +339,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
     let isRemoved = block.removed;
     let isInCounting = block.inCountingArea;
 
-    if (dragStartId && dragCurrentId) {
+    if (isDragging && dragStartId && dragCurrentId) {
       const range = getSelectionRange(dragStartId, dragCurrentId);
       if (range.includes(block.id)) {
         if (isSubtraction) {
@@ -299,9 +350,6 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
       }
     }
 
-    // For addition, if we are looking at the "pool" blocks, they should disappear if in counting area
-    // For counting area blocks, they are always visible there
-
     const colorClass = block.color === 'primary'
       ? 'var(--primary, #3b82f6)'
       : 'var(--secondary, #06b6d4)';
@@ -309,7 +357,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
     return (
       <motion.button
         key={block.id}
-        data-block-id={block.id} // Important for drag detection
+        data-block-id={block.id}
         layout
         initial={{ scale: 0 }}
         animate={{
@@ -321,7 +369,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
         onPointerDown={(e) => handlePointerDown(e, block)}
         disabled={showResult}
         className={`w-10 h-10 rounded-lg shadow-md flex items-center justify-center font-bold text-white transition-all cursor-pointer ${isRemoved ? 'line-through' : 'hover:ring-2 hover:ring-white'
-          } touch-none select-none`} // touch-none prevents scrolling while dragging
+          } touch-none select-none`} // touch-none is crucial for drag
         style={{ backgroundColor: isRemoved ? '#d1d5db' : colorClass }}
       >
         {showBlockNumbers && <span className="text-xs">{block.num}</span>}
@@ -482,7 +530,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
                 {countingAreaBlocks.slice(rowIndex * 10, (rowIndex + 1) * 10).map((block, i) => (
                   <motion.button
                     key={block.id}
-                    data-block-id={block.id} // Add ID for drag
+                    data-block-id={block.id}
                     layout
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
