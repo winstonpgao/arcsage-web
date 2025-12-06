@@ -354,7 +354,7 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            className={`grid gap-1 p-3 bg-white rounded-xl shadow-inner border-4 ${showArea ? 'select-none' : ''}`}
+            className={`grid gap-1 p-3 bg-white rounded-xl shadow-inner border-4 ${showArea ? 'select-none touch-none' : ''}`}
             style={{
               gridTemplateColumns: `repeat(${displayLength}, ${cellSize}px)`,
               borderColor: 'var(--primary, #8b5cf6)',
@@ -382,7 +382,7 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
                     onClick={() => {
                       // Click handled in handleDragEnd to avoid conflict
                     }}
-                    className={`rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center ${showArea ? 'cursor-pointer' : 'cursor-default'
+                    className={`rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center touch-none ${showArea ? 'cursor-pointer' : 'cursor-default'
                       } ${isInDragSelection && !isCounted ? 'ring-2 ring-blue-400 ring-offset-1' : ''}`}
                     style={{
                       width: cellSize,
