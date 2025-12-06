@@ -30,8 +30,9 @@ export function DivisionVisual({ dividend, divisor, showResult }: DivisionVisual
 
   // For large numbers, show scaled representation
   // IMPORTANT: displayDividend must be a multiple of divisor so groups work correctly
-  const isLarge = dividend > 36;
-  const maxGroups = Math.min(Math.floor(36 / divisor), answer); // Max groups we can show
+  const isLarge = dividend > 100;
+  const maxBlocks = 100;
+  const maxGroups = Math.min(Math.floor(maxBlocks / divisor), answer); // Max groups we can show
   const displayDividend = isLarge ? maxGroups * divisor : dividend;
   const displayAnswer = isLarge ? maxGroups : answer; // Groups in the scaled display
   const scaleFactor = isLarge ? dividend / displayDividend : 1;
@@ -47,6 +48,9 @@ export function DivisionVisual({ dividend, divisor, showResult }: DivisionVisual
 
   // Groups - start with one empty group, add more as needed
   const [groups, setGroups] = useState<Group[]>([{ id: 'group-0', index: 0 }]);
+
+  // For display, limit items per group to 20 max for visual clarity
+  const displayItemsPerGroup = 20;
 
   // Drag state
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
@@ -212,9 +216,8 @@ export function DivisionVisual({ dividend, divisor, showResult }: DivisionVisual
             {steps.map((_, i) => (
               <div
                 key={i}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-primary' : 'bg-gray-200'
-                }`}
+                className={`w-3 h-3 rounded-full transition-colors ${i <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                  }`}
               />
             ))}
           </div>
@@ -259,9 +262,8 @@ export function DivisionVisual({ dividend, divisor, showResult }: DivisionVisual
               onDragStart={() => setDraggedItem(item.id)}
               onDragEnd={() => setDraggedItem(null)}
               onClick={() => handleItemTap(item.id)}
-              className={`w-11 h-11 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg cursor-grab active:cursor-grabbing hover:ring-4 hover:ring-primary/30 transition-all ${
-                draggedItem === item.id ? 'opacity-50 scale-90' : ''
-              }`}
+              className={`w-11 h-11 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg cursor-grab active:cursor-grabbing hover:ring-4 hover:ring-primary/30 transition-all ${draggedItem === item.id ? 'opacity-50 scale-90' : ''
+                }`}
             >
               {item.num}
             </motion.button>
@@ -301,18 +303,16 @@ export function DivisionVisual({ dividend, divisor, showResult }: DivisionVisual
                 animate={{ scale: 1, opacity: 1 }}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={() => handleDropInGroup(groupIdx)}
-                className={`p-3 rounded-xl min-h-[120px] transition-all ${
-                  isFull
+                className={`p-3 rounded-xl min-h-[120px] transition-all ${isFull
                     ? 'bg-green-100 border-green-400 border-solid'
                     : isEmpty
                       ? 'bg-gray-50 border-gray-300 border-dashed'
                       : 'bg-secondary/10 border-secondary border-dashed'
-                }`}
+                  }`}
                 style={{ borderWidth: '3px' }}
               >
-                <p className={`text-center text-sm font-bold mb-2 ${
-                  isFull ? 'text-green-600' : isEmpty ? 'text-gray-400' : 'text-secondary'
-                }`}>
+                <p className={`text-center text-sm font-bold mb-2 ${isFull ? 'text-green-600' : isEmpty ? 'text-gray-400' : 'text-secondary'
+                  }`}>
                   Group {groupIdx + 1} {isFull && '✓'}
                 </p>
 
@@ -326,9 +326,8 @@ export function DivisionVisual({ dividend, divisor, showResult }: DivisionVisual
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleItemTap(item.id)}
-                      className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md cursor-pointer ${
-                        isFull ? 'bg-green-500' : 'bg-secondary'
-                      }`}
+                      className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md cursor-pointer ${isFull ? 'bg-green-500' : 'bg-secondary'
+                        }`}
                     >
                       {item.num}
                     </motion.button>

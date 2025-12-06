@@ -22,8 +22,8 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
   const targetGroups = num1;
   const itemsPerGroup = num2;
 
-  // For display, limit items per group to 10 max for visual clarity
-  const displayItemsPerGroup = Math.min(itemsPerGroup, 10);
+  // For display, limit items per group to 20 max for visual clarity
+  const displayItemsPerGroup = Math.min(itemsPerGroup, 20);
 
   // Track number of groups (start with 1, user can add more up to targetGroups)
   const [numGroups, setNumGroups] = useState(1);
@@ -164,9 +164,8 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
             {steps.map((_, i) => (
               <div
                 key={i}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-primary' : 'bg-gray-200'
-                }`}
+                className={`w-3 h-3 rounded-full transition-colors ${i <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                  }`}
               />
             ))}
           </div>
@@ -221,11 +220,10 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: groupIdx * 0.05 }}
-                className={`p-3 rounded-xl transition-all ${
-                  isFull
+                className={`p-3 rounded-xl transition-all ${isFull
                     ? 'bg-green-100 border-green-400 border-solid'
                     : 'bg-secondary/10 border-secondary border-dashed'
-                }`}
+                  }`}
                 style={{ borderWidth: '3px' }}
               >
                 <p className={`text-center text-sm font-bold mb-2 ${isFull ? 'text-green-600' : 'text-secondary'}`}>
@@ -242,9 +240,8 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
                         key={`item-${groupIdx}-${i}`}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className={`w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md ${
-                          isFull ? 'bg-green-500' : 'bg-secondary'
-                        }`}
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md ${isFull ? 'bg-green-500' : 'bg-secondary'
+                          }`}
                       >
                         {seqNum}
                       </motion.div>
@@ -265,11 +262,10 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
                   <button
                     onClick={() => removeFromGroup(groupIdx)}
                     disabled={count <= 0}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-md transition-all ${
-                      count <= 0
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-md transition-all ${count <= 0
                         ? 'bg-gray-300 cursor-not-allowed'
                         : 'bg-red-400 hover:bg-red-500 active:scale-95'
-                    }`}
+                      }`}
                   >
                     <Minus className="w-5 h-5" />
                   </button>
@@ -281,11 +277,10 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
                   <button
                     onClick={() => addToGroup(groupIdx)}
                     disabled={count >= displayItemsPerGroup}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-md transition-all ${
-                      count >= displayItemsPerGroup
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-md transition-all ${count >= displayItemsPerGroup
                         ? 'bg-gray-300 cursor-not-allowed'
                         : 'bg-green-500 hover:bg-green-600 active:scale-95'
-                    }`}
+                      }`}
                   >
                     <Plus className="w-5 h-5" />
                   </button>
@@ -308,13 +303,12 @@ export function MultiplicationGrid({ num1, num2, showResult }: MultiplicationGri
                 key={idx}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: count > 0 ? 1 : 0.3, y: 0 }}
-                className={`px-3 py-1 rounded-full text-sm font-bold ${
-                  isFull
+                className={`px-3 py-1 rounded-full text-sm font-bold ${isFull
                     ? 'bg-green-100 text-green-700'
                     : count > 0
                       ? 'bg-secondary/20 text-secondary'
                       : 'bg-gray-100 text-gray-400'
-                }`}
+                  }`}
               >
                 {runningTotal}
               </motion.div>

@@ -291,11 +291,10 @@ function ItemsGrid({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: i * 0.02 }}
-            className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-              isHighlighted
-                ? 'text-white'
-                : 'bg-gray-200 text-gray-500'
-            }`}
+            className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isHighlighted
+              ? 'text-white'
+              : 'bg-gray-200 text-gray-500'
+              }`}
             style={isHighlighted ? { backgroundColor: color } : {}}
           >
             {i + 1}
@@ -312,14 +311,12 @@ export function PercentageVisual({ percent, total, showResult }: PercentageVisua
   const [currentFill, setCurrentFill] = useState(0);
 
   const result = (percent / 100) * total;
-  const dropsNeeded = Math.round(percent / 10);
-  const [dropsAvailable, setDropsAvailable] = useState(dropsNeeded);
 
   const steps = [
     { text: `${percent}% means ${percent} out of every 100!` },
     { text: `Tap water drops to fill the glass to ${percent}%` },
-    { text: `Each drop adds 10% to the glass` },
-    { text: `${dropsNeeded} drops × 10% = ${percent}%` },
+    { text: `You can add 5% or 10% drops` },
+    { text: `Fill it up to exactly ${percent}%` },
     { text: `${percent}% of ${total} = ${result}!` },
   ];
 
@@ -338,29 +335,25 @@ export function PercentageVisual({ percent, total, showResult }: PercentageVisua
   const resetAll = () => {
     setCurrentStep(-1);
     setCurrentFill(0);
-    setDropsAvailable(dropsNeeded);
   };
 
-  // Add a drop (10%)
-  const addDrop = () => {
-    if (dropsAvailable > 0 && currentFill < percent) {
-      setCurrentFill(Math.min(currentFill + 10, 100));
-      setDropsAvailable(dropsAvailable - 1);
+  // Add a drop (5% or 10%)
+  const addDrop = (amount: number) => {
+    if (currentFill + amount <= 100) {
+      setCurrentFill(currentFill + amount);
     }
   };
 
   // Remove water (click on glass)
   const removeWater = () => {
     if (currentFill > 0) {
-      setCurrentFill(Math.max(currentFill - 10, 0));
-      setDropsAvailable(Math.min(dropsAvailable + 1, dropsNeeded));
+      setCurrentFill(Math.max(currentFill - 5, 0));
     }
   };
 
   // Auto-fill for "Show Me"
   const autoFill = () => {
     setCurrentFill(percent);
-    setDropsAvailable(0);
     speak(`${percent}% of ${total} equals ${result}. The glass is ${percent} percent full!`);
   };
 
@@ -429,9 +422,8 @@ export function PercentageVisual({ percent, total, showResult }: PercentageVisua
             {steps.map((_, i) => (
               <div
                 key={i}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-cyan-500' : 'bg-gray-200'
-                }`}
+                className={`w-3 h-3 rounded-full transition-colors ${i <= currentStep ? 'bg-cyan-500' : 'bg-gray-200'
+                  }`}
               />
             ))}
           </div>
@@ -447,32 +439,23 @@ export function PercentageVisual({ percent, total, showResult }: PercentageVisua
         </div>
       </div>
 
-      {/* Water drops pool */}
+      {/* Water drops controls */}
       <div className="mb-4 p-4 bg-white/70 rounded-xl">
         <p className="text-gray-600 font-bold mb-3 text-center">
           <Droplets className="inline w-5 h-5 mr-1 text-cyan-500" />
-          Water drops to use ({dropsNeeded} needed, each = 10%):
+          Add water drops:
         </p>
-        <div className="flex flex-wrap gap-3 justify-center min-h-[80px] items-center">
-          <AnimatePresence>
-            {Array.from({ length: dropsAvailable }).map((_, i) => (
-              <WaterDrop
-                key={`drop-${i}`}
-                onClick={addDrop}
-                color={waterColor}
-                value={10}
-              />
-            ))}
-          </AnimatePresence>
-          {dropsAvailable === 0 && (
-            <motion.p
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="text-green-600 font-bold text-lg"
-            >
-              Glass is full to {percent}%!
-            </motion.p>
-          )}
+        <div className="flex flex-wrap gap-8 justify-center min-h-[80px] items-center">
+          <WaterDrop
+            onClick={() => addDrop(5)}
+            color={waterColor}
+            value={5}
+          />
+          <WaterDrop
+            onClick={() => addDrop(10)}
+            color={waterColor}
+            value={10}
+          />
         </div>
       </div>
 
@@ -494,8 +477,8 @@ export function PercentageVisual({ percent, total, showResult }: PercentageVisua
             {!allCorrect && currentFill > 0 && (
               <p className="text-sm text-gray-500">
                 {currentFill < percent
-                  ? `Need ${(percent - currentFill) / 10} more drops`
-                  : `Remove ${(currentFill - percent) / 10} drops`}
+                  ? `Need ${percent - currentFill}% more`
+                  : `Remove ${currentFill - percent}%`}
               </p>
             )}
           </div>

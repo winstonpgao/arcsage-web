@@ -20,16 +20,16 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
 
   // Drag selection state
   const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState<{row: number, col: number} | null>(null);
-  const [dragCurrent, setDragCurrent] = useState<{row: number, col: number} | null>(null);
+  const [dragStart, setDragStart] = useState<{ row: number, col: number } | null>(null);
+  const [dragCurrent, setDragCurrent] = useState<{ row: number, col: number } | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Scale factor for display - limit to reasonable visual size
-  const maxDisplaySize = 8;
+  const maxDisplaySize = 15;
   const displayLength = Math.min(length, maxDisplaySize);
   const displayWidth = Math.min(width, maxDisplaySize);
   const maxDim = Math.max(displayLength, displayWidth);
-  const cellSize = maxDim <= 4 ? 52 : maxDim <= 6 ? 44 : 36;
+  const cellSize = maxDim <= 4 ? 52 : maxDim <= 8 ? 40 : maxDim <= 12 ? 32 : 26;
 
   const totalCells = displayLength * displayWidth;
   const area = length * width;
@@ -129,6 +129,14 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
 
   const dragSelectionCells = getCellsInDragSelection();
 
+  // Get sorted list of cells in drag selection for numbering
+  const sortedDragCells = Array.from(dragSelectionCells).sort((a, b) => {
+    const [r1, c1] = a.split('-').map(Number);
+    const [r2, c2] = b.split('-').map(Number);
+    if (r1 !== r2) return r1 - r2;
+    return c1 - c2;
+  });
+
   // Handle drag start
   const handleDragStart = (row: number, col: number) => {
     if (!showArea) return;
@@ -165,19 +173,37 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
   // Handle drag end
   const handleDragEnd = useCallback(() => {
     if (isDragging && dragStart && dragCurrent) {
-      // Add all cells in selection to counted with sequence numbers
-      const newCounted = new Map(countedCells);
-      const selectionCells = getCellsInDragSelection();
-      let nextNum = newCounted.size + 1;
-      selectionCells.forEach(cell => {
-        if (!newCounted.has(cell)) {
-          newCounted.set(cell, nextNum++);
-        }
-      });
-      setCountedCells(newCounted);
+      // Check if this was a click (start == current)
+      if (dragStart.row === dragCurrent.row && dragStart.col === dragCurrent.col) {
+        handleCellClick(dragStart.row, dragStart.col);
+      } else {
+        // Drag selection - add range
+        const newCounted = new Map(countedCells);
+        const selectionCells = getCellsInDragSelection();
 
-      // Announce count
-      speak(`${newCounted.size} squares selected`);
+        // Sort selection cells for deterministic numbering
+        const sortedSelection = Array.from(selectionCells).sort((a, b) => {
+          const [r1, c1] = a.split('-').map(Number);
+          const [r2, c2] = b.split('-').map(Number);
+          if (r1 !== r2) return r1 - r2;
+          return c1 - c2;
+        });
+
+        let addedCount = 0;
+        let nextNum = newCounted.size + 1;
+
+        sortedSelection.forEach(cell => {
+          if (!newCounted.has(cell)) {
+            newCounted.set(cell, nextNum++);
+            addedCount++;
+          }
+        });
+
+        if (addedCount > 0) {
+          setCountedCells(newCounted);
+          speak(`${addedCount} squares added`);
+        }
+      }
     }
 
     setIsDragging(false);
@@ -253,14 +279,13 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
             {steps.map((_, i) => (
               <div
                 key={i}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-primary' : 'bg-gray-200'
-                }`}
+                className={`w-3 h-3 rounded-full transition-colors ${i <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                  }`}
               />
             ))}
           </div>
           <div className="flex gap-2">
-            {isStepActive && (
+            {(isStepActive || countedCells.size > 0) && (
               <button
                 onClick={resetSteps}
                 className="flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
@@ -295,11 +320,10 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
             }}
             className="absolute -top-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
           >
-            <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${
-              isStepActive && (steps[currentStep]?.highlight === 'length' || steps[currentStep]?.highlight === 'top')
-                ? 'bg-primary text-white ring-4 ring-primary/30'
-                : 'bg-primary/80 text-white'
-            }`}>
+            <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${isStepActive && (steps[currentStep]?.highlight === 'length' || steps[currentStep]?.highlight === 'top')
+              ? 'bg-primary text-white ring-4 ring-primary/30'
+              : 'bg-primary/80 text-white'
+              }`}>
               {length} units
             </div>
             <div className="text-primary text-xl font-bold">↓</div>
@@ -315,11 +339,10 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
             }}
             className="absolute top-1/2 -left-28 transform -translate-y-1/2 flex items-center gap-1"
           >
-            <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${
-              isStepActive && (steps[currentStep]?.highlight === 'width' || steps[currentStep]?.highlight === 'left')
-                ? 'bg-secondary text-white ring-4 ring-secondary/30'
-                : 'bg-secondary/80 text-white'
-            }`}>
+            <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${isStepActive && (steps[currentStep]?.highlight === 'width' || steps[currentStep]?.highlight === 'left')
+              ? 'bg-secondary text-white ring-4 ring-secondary/30'
+              : 'bg-secondary/80 text-white'
+              }`}>
               {width} units
             </div>
             <div className="text-secondary text-xl font-bold">→</div>
@@ -357,14 +380,10 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
                     }}
                     onTouchStart={() => handleDragStart(row, col)}
                     onClick={() => {
-                      // Only handle single click if not dragging
-                      if (!isDragging && showArea) {
-                        handleCellClick(row, col);
-                      }
+                      // Click handled in handleDragEnd to avoid conflict
                     }}
-                    className={`rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center ${
-                      showArea ? 'cursor-pointer' : 'cursor-default'
-                    } ${isInDragSelection && !isCounted ? 'ring-2 ring-blue-400 ring-offset-1' : ''}`}
+                    className={`rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center ${showArea ? 'cursor-pointer' : 'cursor-default'
+                      } ${isInDragSelection && !isCounted ? 'ring-2 ring-blue-400 ring-offset-1' : ''}`}
                     style={{
                       width: cellSize,
                       height: cellSize,
@@ -380,7 +399,11 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
                       boxShadow: isCounted || isInDragSelection || highlightEdge ? '0 4px 6px rgba(0,0,0,0.15)' : 'none',
                     }}
                   >
-                    {isCounted ? countedCells.get(key) : ''}
+                    {isCounted
+                      ? countedCells.get(key)
+                      : isInDragSelection
+                        ? (countedCells.size + sortedDragCells.indexOf(key) + 1)
+                        : ''}
                   </motion.div>
                 );
               })
@@ -406,11 +429,10 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
               className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
             >
               <div className="text-primary text-xl font-bold">↑</div>
-              <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${
-                isStepActive && steps[currentStep]?.highlight === 'bottom'
-                  ? 'bg-primary text-white ring-4 ring-primary/30'
-                  : 'bg-primary/80 text-white'
-              }`}>
+              <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${isStepActive && steps[currentStep]?.highlight === 'bottom'
+                ? 'bg-primary text-white ring-4 ring-primary/30'
+                : 'bg-primary/80 text-white'
+                }`}>
                 {length} units
               </div>
             </motion.div>
@@ -428,11 +450,10 @@ export function RectangleVisual({ length, width, showArea = true, showPerimeter 
               className="absolute top-1/2 -right-28 transform -translate-y-1/2 flex items-center gap-1"
             >
               <div className="text-secondary text-xl font-bold">←</div>
-              <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${
-                isStepActive && steps[currentStep]?.highlight === 'right'
-                  ? 'bg-secondary text-white ring-4 ring-secondary/30'
-                  : 'bg-secondary/80 text-white'
-              }`}>
+              <div className={`px-4 py-2 rounded-full font-bold text-lg shadow-lg transition-all ${isStepActive && steps[currentStep]?.highlight === 'right'
+                ? 'bg-secondary text-white ring-4 ring-secondary/30'
+                : 'bg-secondary/80 text-white'
+                }`}>
                 {width} units
               </div>
             </motion.div>

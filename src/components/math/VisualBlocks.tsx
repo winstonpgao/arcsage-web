@@ -31,7 +31,7 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
   const isSubtraction = operator === '-';
 
   // For large numbers, use scaled representation
-  const maxBlocks = 60;
+  const maxBlocks = 100;
   const isLarge = isSubtraction ? num1 > maxBlocks : (num1 + num2) > maxBlocks;
 
   // Calculate display numbers - scale down if too large, preserving exact ratio
@@ -217,9 +217,8 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
         whileTap={{ scale: 0.9 }}
         onClick={() => handleBlockClick(block)}
         disabled={showResult}
-        className={`w-10 h-10 rounded-lg shadow-md flex items-center justify-center font-bold text-white transition-all cursor-pointer ${
-          isRemoved ? 'line-through' : 'hover:ring-2 hover:ring-white'
-        }`}
+        className={`w-10 h-10 rounded-lg shadow-md flex items-center justify-center font-bold text-white transition-all cursor-pointer ${isRemoved ? 'line-through' : 'hover:ring-2 hover:ring-white'
+          }`}
         style={{ backgroundColor: isRemoved ? '#d1d5db' : colorClass }}
       >
         {showBlockNumbers && <span className="text-xs">{block.num}</span>}
@@ -296,9 +295,8 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
             {steps.map((_, i) => (
               <div
                 key={i}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-primary' : 'bg-gray-200'
-                }`}
+                className={`w-3 h-3 rounded-full transition-colors ${i <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                  }`}
               />
             ))}
           </div>
@@ -483,9 +481,8 @@ export function VisualBlocks({ num1, num2, operator, showResult, answer }: Visua
               {steps.map((_, i) => (
                 <div
                   key={i}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    i <= currentStep ? 'bg-primary' : 'bg-gray-200'
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-colors ${i <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                    }`}
                 />
               ))}
             </div>
