@@ -27,10 +27,10 @@ const AboutPage = () => {
             </section>
 
             {/* Our Team Section */}
-            <div style={{ padding: '80px 0', backgroundColor: 'var(--color-background)' }}>
+            <div className="about-section" style={{ padding: '80px 0', backgroundColor: 'var(--color-background)' }}>
                 <div className="container">
                     <h2 style={{ textAlign: 'left', marginBottom: '12px', fontSize: '36px' }}>Our Team</h2>
-                    <p style={{ color: 'var(--color-accent)', fontSize: '18px', marginBottom: '40px' }}>Experts in Data & Engineering</p>
+                    <p className="subtitle" style={{ color: 'var(--color-accent)', fontSize: '18px', marginBottom: '40px' }}>Experts in Data & Engineering</p>
                     <div style={{ textAlign: 'left', fontSize: '20px', lineHeight: '1.8', color: 'var(--color-text-secondary)' }}>
                         <p style={{ marginBottom: '24px' }}>
                             Founded in 2025 and headquartered in Melbourne, Australia, our company is a team of data scientists and software engineers passionate about building intelligent applications and automation.
@@ -51,10 +51,10 @@ const AboutPage = () => {
             </div>
 
             {/* Mission Section */}
-            <div style={{ padding: '80px 0', backgroundColor: 'var(--color-surface-dark, #1a1a2e)' }}>
+            <div className="about-section" style={{ padding: '80px 0', backgroundColor: 'var(--color-surface-dark, #1a1a2e)' }}>
                 <div className="container">
                     <h2 style={{ textAlign: 'left', marginBottom: '12px', fontSize: '36px' }}>Our Mission</h2>
-                    <p style={{ color: 'var(--color-accent)', fontSize: '18px', marginBottom: '40px' }}>Connecting Human and Machine Intelligence</p>
+                    <p className="subtitle" style={{ color: 'var(--color-accent)', fontSize: '18px', marginBottom: '40px' }}>Connecting Human and Machine Intelligence</p>
                     <div style={{ textAlign: 'left', fontSize: '20px', lineHeight: '1.8', color: 'var(--color-text-secondary)' }}>
                         <p style={{ marginBottom: '24px' }}>
                             Our mission is to connect human and machine intelligence to streamline decision-making, increase efficiency, and unlock actionable insights.
@@ -70,10 +70,10 @@ const AboutPage = () => {
             </div>
 
             {/* Values Section */}
-            <div style={{ padding: '80px 0 100px', backgroundColor: 'var(--color-surface)' }}>
+            <div className="about-section" style={{ padding: '80px 0 100px', backgroundColor: 'var(--color-surface)' }}>
                 <div className="container">
-                    <h2 style={{ textAlign: 'left', marginBottom: '60px', fontSize: '36px' }}>Our Core Values</h2>
-                    <div style={{
+                    <h2 style={{ textAlign: 'left', marginBottom: '40px', fontSize: '36px' }}>Our Core Values</h2>
+                    <div className="values-grid" style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(2, 1fr)',
                         gap: '40px'

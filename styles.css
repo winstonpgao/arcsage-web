@@ -312,6 +312,43 @@ p {
     font-size: 15px;
   }
 
+  /* About page values grid - single column on mobile */
+  .values-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .values-grid > div {
+    padding: 24px !important;
+  }
+
+  .values-grid h3 {
+    font-size: 22px !important;
+  }
+
+  .values-grid p {
+    font-size: 16px !important;
+  }
+
+  /* About page section adjustments for mobile */
+  .about-section {
+    padding: 48px 0 !important;
+  }
+
+  .about-section h2 {
+    font-size: 28px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .about-section .subtitle {
+    font-size: 16px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .about-section .content {
+    font-size: 16px !important;
+  }
+
   /* Stack elements vertically on mobile */
   .flex-desktop {
     flex-direction: column !important;
