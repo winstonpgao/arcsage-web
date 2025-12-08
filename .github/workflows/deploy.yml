@@ -33,6 +33,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Clone and build MathBuddy
+        run: |
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/winstonpgao/math.git mathbuddy-temp
+          cd mathbuddy-temp
+          npm ci
+          npm run build
+          cp -r out ../dist/math
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

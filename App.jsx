@@ -5,6 +5,7 @@ import Hero from './Hero';
 import Section from './Section';
 import FeaturesCarousel from './FeaturesCarousel';
 import ContactPage from './ContactPage';
+import AboutPage from './AboutPage';
 import Integrations from './Integrations';
 import {
   MessageSquare,
@@ -237,6 +238,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );

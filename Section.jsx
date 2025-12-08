@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Section = ({ id, title, subtitle, children, background = "white", theme = "light", image = null, imagePosition = "right", enableAnimation = true }) => {
+const Section = ({ id, title, subtitle, children, background = "white", theme = "light", image = null, imagePosition = "right", enableAnimation = true, style = {} }) => {
     const isDark = theme === "dark";
     const isGray = background === "gray";
     const isTransparent = background === "transparent";
@@ -14,10 +14,11 @@ const Section = ({ id, title, subtitle, children, background = "white", theme = 
         <section id={id} className="section-padding" style={{
             backgroundColor: bgColor,
             color: textColor,
-            borderTop: isDark ? "none" : "1px solid var(--color-border)"
+            borderTop: isDark ? "none" : "1px solid var(--color-border)",
+            ...style
         }}>
             <div className="container">
-            <div className={image ? "section-grid" : ""}>
+                <div className={image ? "section-grid" : ""}>
                     <div style={{ order: image && imagePosition === "left" ? 2 : 1 }}>
                         <motion.div
                             initial="hidden"
@@ -35,7 +36,7 @@ const Section = ({ id, title, subtitle, children, background = "white", theme = 
                                     }
                                 }
                             }}
-                            style={{ maxWidth: image ? '100%' : '800px', margin: image ? '0' : '0 auto 60px' }}
+                            style={{ maxWidth: image ? '100%' : '800px', margin: image ? '0' : '0 auto 32px' }}
                         >
                             {title && <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} style={{ marginBottom: '24px' }}>{title}</motion.h2>}
                             {subtitle && <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} style={{ fontSize: '21px', lineHeight: '1.5', color: subTextColor, marginBottom: image ? '32px' : '0' }}>{subtitle}</motion.p>}

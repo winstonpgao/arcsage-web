@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import BackToTop from './BackToTop';
-import { Link } from 'react-router-dom';
 
 const Layout = ({ children }) => {
     const { scrollY } = useScroll();
@@ -32,10 +32,11 @@ const Layout = ({ children }) => {
             }}>
                 <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     <Logo />
-                    <nav style={{ display: 'flex', gap: 'clamp(16px, 4vw, 32px)', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <a href="/#features" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)', textDecoration: 'none', whiteSpace: 'nowrap' }}>Features</a>
-                        <a href="/#results" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)', textDecoration: 'none', whiteSpace: 'nowrap' }}>Results</a>
-                        <Link to="/contact" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '14px', whiteSpace: 'nowrap' }}>Contact</Link>
+                    <nav style={{ display: 'flex', gap: '32px' }}>
+                        <Link to="/" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>Features</Link>
+                        <Link to="/about" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>About</Link>
+                        <a href="/#results" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>Results</a>
+                        <Link to="/contact" className="btn btn-glass" style={{ padding: '8px 16px', fontSize: '14px' }}>Contact</Link>
                     </nav>
                 </div>
             </header>
