@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Lightbulb, Users, Zap, Shield } from 'lucide-react';
+import Layout from './Layout';
 
 const AboutPage = () => {
     return (
+        <Layout>
         <div style={{ paddingTop: '80px', backgroundColor: 'var(--color-background)' }}>
             {/* Hero Section */}
             {/* Hero Section */}
@@ -110,6 +112,7 @@ const AboutPage = () => {
                 </div>
             </div>
         </div>
+        </Layout>
     );
 };
 

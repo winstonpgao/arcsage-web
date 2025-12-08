@@ -32,10 +32,10 @@ const Layout = ({ children }) => {
             }}>
                 <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     <Logo />
-                    <nav style={{ display: 'flex', gap: '32px' }}>
+                    <nav style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
                         <Link to="/" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>Features</Link>
-                        <Link to="/about" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>About</Link>
                         <a href="/#results" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>Results</a>
+                        <Link to="/about" style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>About</Link>
                         <Link to="/contact" className="btn btn-glass" style={{ padding: '8px 16px', fontSize: '14px' }}>Contact</Link>
                     </nav>
                 </div>
