@@ -52,24 +52,23 @@ const AboutPage = () => {
             </Section>
 
             {/* Mission Section */}
-            <Section
-                title="Our Mission"
-                subtitle="Connecting Human and Machine Intelligence"
-                theme="dark"
-                style={{ paddingTop: '40px', paddingBottom: '40px' }}
-            >
-                <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'left', fontSize: '20px', lineHeight: '1.8', color: 'var(--color-text-secondary)' }}>
-                    <p style={{ marginBottom: '24px' }}>
-                        Our mission is to connect human and machine intelligence to streamline decision-making, increase efficiency, and unlock actionable insights.
-                    </p>
-                    <p style={{ marginBottom: '24px' }}>
-                        Our products transform workflows across <strong>financial services, higher education, real estate, retail, and pharmacy</strong>.
-                    </p>
-                    <p>
-                        We target enterprises seeking smarter, scalable, and secure AI-driven solutions, and differentiate through deep domain expertise and end-to-end integration of data science, AI, and LLM technologies.
-                    </p>
+            <div style={{ padding: '80px 0', backgroundColor: 'var(--color-surface-dark, #1a1a2e)' }}>
+                <div className="container">
+                    <h2 style={{ textAlign: 'left', marginBottom: '12px', fontSize: '36px' }}>Our Mission</h2>
+                    <p style={{ color: 'var(--color-accent)', fontSize: '18px', marginBottom: '40px' }}>Connecting Human and Machine Intelligence</p>
+                    <div style={{ textAlign: 'left', fontSize: '20px', lineHeight: '1.8', color: 'var(--color-text-secondary)' }}>
+                        <p style={{ marginBottom: '24px' }}>
+                            Our mission is to connect human and machine intelligence to streamline decision-making, increase efficiency, and unlock actionable insights.
+                        </p>
+                        <p style={{ marginBottom: '24px' }}>
+                            Our products transform workflows across <strong style={{ color: 'var(--color-text-primary)' }}>financial services, higher education, real estate, retail, and pharmacy</strong>.
+                        </p>
+                        <p>
+                            We target enterprises seeking smarter, scalable, and secure AI-driven solutions, and differentiate through deep domain expertise and end-to-end integration of data science, AI, and LLM technologies.
+                        </p>
+                    </div>
                 </div>
-            </Section>
+            </div>
 
             {/* Values Section */}
             <div style={{ padding: '80px 0 100px', backgroundColor: 'var(--color-surface)' }}>
