@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Section from './Section';
-import { Lightbulb, Users, Zap, Globe } from 'lucide-react';
+import { Lightbulb, Users, Zap, Shield } from 'lucide-react';
 
 const AboutPage = () => {
     return (
@@ -77,13 +77,14 @@ const AboutPage = () => {
                     <h2 style={{ textAlign: 'left', marginBottom: '60px', fontSize: '36px' }}>Our Core Values</h2>
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
                         gap: '40px'
                     }}>
                         {[
                             { icon: <Zap size={40} />, title: "Innovation", text: "We push the boundaries of what AI can do, constantly evolving our technology to stay ahead of the curve." },
                             { icon: <Users size={40} />, title: "Human-Centric", text: "Technology is a tool for people. User experience is at the heart of every decision we make." },
-                            { icon: <Lightbulb size={40} />, title: "Clarity", text: "We turn chaos into order, providing clear insights and actionable results that drive business growth." }
+                            { icon: <Lightbulb size={40} />, title: "Clarity", text: "We turn chaos into order, providing clear insights and actionable results that drive business growth." },
+                            { icon: <Shield size={40} />, title: "Integrity", text: "We build trust through transparency, security, and ethical AI practices that protect your data and business." }
                         ].map((item, index) => (
                             <motion.div
                                 key={index}
