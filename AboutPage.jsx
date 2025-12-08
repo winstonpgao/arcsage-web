@@ -60,7 +60,7 @@ const AboutPage = () => {
                             Our mission is to connect human and machine intelligence to streamline decision-making, increase efficiency, and unlock actionable insights.
                         </p>
                         <p style={{ marginBottom: '24px' }}>
-                            Our products transform workflows across <strong style={{ color: 'var(--color-text-primary)' }}>financial services, higher education, real estate, retail, and pharmacy</strong>.
+                            Our products transform workflows across financial services, higher education, real estate, retail, and pharmacy.
                         </p>
                         <p>
                             We target enterprises seeking smarter, scalable, and secure AI-driven solutions, and differentiate through deep domain expertise and end-to-end integration of data science, AI, and LLM technologies.
