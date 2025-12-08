@@ -35,7 +35,7 @@ jobs:
 
       - name: Clone and build MathBuddy
         run: |
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/winstonpgao/math.git mathbuddy-temp
+          git clone https://x-access-token:${{ secrets.MATH_REPO_TOKEN }}@github.com/winstonpgao/math.git mathbuddy-temp
           cd mathbuddy-temp
           npm ci
           npm run build
