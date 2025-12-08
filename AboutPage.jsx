@@ -38,10 +38,10 @@ const AboutPage = () => {
                         <p style={{ marginBottom: '16px' }}>
                             We specialize in:
                         </p>
-                        <ul style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '12px', marginBottom: '24px' }}>
-                            {['Applied Data Science', 'Reporting & Visualization Pipelines', 'Data Warehouse Design', 'Automation', 'Cloud Infrastructure', 'Application Development'].map((item, i) => (
-                                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-accent)' }} />
+                        <ul className="specialties-grid" style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px 40px', marginBottom: '24px' }}>
+                            {['Applied Data Science', 'Automation', 'Reporting & Visualization Pipelines', 'Cloud Infrastructure', 'Data Warehouse Design', 'Application Development'].map((item, i) => (
+                                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-accent)', flexShrink: 0 }} />
                                     {item}
                                 </li>
                             ))}

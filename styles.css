@@ -318,6 +318,12 @@ p {
     gap: 24px !important;
   }
 
+  /* Specialties grid - single column on mobile */
+  .specialties-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
   .values-grid > div {
     padding: 24px !important;
   }
