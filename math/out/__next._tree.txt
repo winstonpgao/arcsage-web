@@ -1,0 +1,2 @@
+:HL["/math/_next/static/chunks/b1bac218ce276002.css","style"]
+0:{"buildId":"K8Q_yAjnok_h0nwEw657T","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
