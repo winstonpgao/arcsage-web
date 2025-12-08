@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Section from './Section';
 import { Lightbulb, Users, Zap, Shield } from 'lucide-react';
 
 const AboutPage = () => {
@@ -28,28 +27,28 @@ const AboutPage = () => {
             </section>
 
             {/* Our Team Section */}
-            <Section
-                title="Our Team"
-                subtitle="Experts in Data & Engineering"
-                style={{ paddingBottom: '20px' }}
-            >
-                <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'left', fontSize: '18px', lineHeight: '1.8', color: 'var(--color-text-secondary)' }}>
-                    <p style={{ marginBottom: '24px', fontSize: '20px' }}>
-                        Founded in 2025 and headquartered in Melbourne, Australia, our company is a team of data scientists and software engineers passionate about building intelligent applications and automation.
-                    </p>
-                    <p style={{ marginBottom: '16px' }}>
-                        We specialize in:
-                    </p>
-                    <ul style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '12px', marginBottom: '24px' }}>
-                        {['Applied Data Science', 'Reporting & Visualization Pipelines', 'Data Warehouse Design', 'Automation', 'Cloud Infrastructure', 'Application Development'].map((item, i) => (
-                            <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-accent)' }} />
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
+            <div style={{ padding: '80px 0', backgroundColor: 'var(--color-background)' }}>
+                <div className="container">
+                    <h2 style={{ textAlign: 'left', marginBottom: '12px', fontSize: '36px' }}>Our Team</h2>
+                    <p style={{ color: 'var(--color-accent)', fontSize: '18px', marginBottom: '40px' }}>Experts in Data & Engineering</p>
+                    <div style={{ textAlign: 'left', fontSize: '20px', lineHeight: '1.8', color: 'var(--color-text-secondary)' }}>
+                        <p style={{ marginBottom: '24px' }}>
+                            Founded in 2025 and headquartered in Melbourne, Australia, our company is a team of data scientists and software engineers passionate about building intelligent applications and automation.
+                        </p>
+                        <p style={{ marginBottom: '16px' }}>
+                            We specialize in:
+                        </p>
+                        <ul style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+                            {['Applied Data Science', 'Reporting & Visualization Pipelines', 'Data Warehouse Design', 'Automation', 'Cloud Infrastructure', 'Application Development'].map((item, i) => (
+                                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-accent)' }} />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
-            </Section>
+            </div>
 
             {/* Mission Section */}
             <div style={{ padding: '80px 0', backgroundColor: 'var(--color-surface-dark, #1a1a2e)' }}>
