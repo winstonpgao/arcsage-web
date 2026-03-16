@@ -237,7 +237,7 @@ export default function HomePage() {
             { title: 'Dashboard', desc: 'At-a-glance metrics, recent agents, and quick actions', file: 'dashboard.png' },
             { title: 'Visual Flow Builder', desc: 'Drag-and-drop conversation flows with 33+ node types for lead qualification', file: 'flow-editor-booking.png' },
             { title: 'Agent Builder', desc: 'Create agents from templates: lead qualification, inspection booking, and more', file: 'agents.png' },
-            { title: 'Full Qualification Flow', desc: '33-node lead qualification workflow covering all 11 scoring dimensions', file: 'flow-editor-full.png' },
+            { title: 'Notifications', desc: 'Real-time alerts for bookings, calls, and system events', file: 'notifications.png' },
             { title: 'Calendar', desc: 'Integrated scheduling for inspections, follow-ups, and team coordination', file: 'calendar.png' },
             { title: 'Billing & Pricing', desc: 'Transparent usage-based pricing with real-time cost tracking', file: 'billing.png' },
           ].map((s, i) => (
