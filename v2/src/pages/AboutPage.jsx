@@ -55,15 +55,15 @@ export default function AboutPage() {
               happens across multiple languages and time zones.
             </p>
             <p>
-              We saw an opportunity to apply modern AI — large language models, intelligent scoring
-              systems, and conversational voice agents — to solve this problem at scale. Not as a
+              We saw an opportunity to apply modern AI including large language models, intelligent scoring
+              systems, and conversational voice agents to solve this problem at scale. Not as a
               generic chatbot, but as a purpose-built platform that understands the nuances of
               real estate: property preferences, budget signals, pre-approval status, and cultural context.
             </p>
             <p>
               Today, ArcSage is live in production, processing over 25,000 leads for Australian
-              real estate agencies. Our platform handles the entire qualification pipeline — from
-              initial enquiry to scored lead to personalised follow-up — in minutes, not days.
+              real estate agencies. Our platform handles the entire qualification pipeline,from
+              initial enquiry to scored lead to personalised follow-up. In minutes, not days.
             </p>
           </motion.div>
         </div>
@@ -90,7 +90,7 @@ export default function AboutPage() {
               <p>
                 AI and data engineer with deep experience in enterprise AI systems, ML infrastructure,
                 and automation platforms. Background spanning data analytics, cloud architecture (GCP),
-                and full-stack development. Leads ArcSage's technical vision — from LLM pipeline design
+                and full-stack development. Leads ArcSage's technical vision, from LLM pipeline design
                 to voice AI agent development.
               </p>
               <div className="team-card__skills">
@@ -101,8 +101,8 @@ export default function AboutPage() {
               </div>
             </motion.div>
             <motion.div className="team-card" variants={fadeUp}>
-              <div className="team-card__avatar">RW</div>
-              <h3>Ris Wang</h3>
+              <div className="team-card__avatar">IW</div>
+              <h3>Iris Wang</h3>
               <span className="team-card__role">Co-Founder & CEO</span>
               <p>
                 Business strategist with extensive experience in real estate operations, client management,
@@ -164,7 +164,7 @@ export default function AboutPage() {
               {
                 icon: <Eye size={28} />,
                 title: 'Clarity',
-                desc: 'We turn complex data into clear, actionable insights. No black boxes — every score is explainable.',
+                desc: 'We turn complex data into clear, actionable insights. No black boxes, every score is explainable.',
               },
               {
                 icon: <Shield size={28} />,

@@ -49,7 +49,7 @@ export default function HomePage() {
             <h1>AI-Powered Lead Qualification for Real Estate</h1>
             <p className="hero__subtitle">
               ArcSage automates lead intake, intelligent scoring, personalised follow-up,
-              and multilingual communication — so your agents focus on closing deals, not chasing leads.
+              and multilingual communication, so your agents focus on closing deals, not chasing leads.
             </p>
             <div className="hero__ctas">
               <Link to="/contact" className="btn btn--primary btn--lg">
@@ -157,7 +157,7 @@ export default function HomePage() {
               step: '03',
               icon: <MessageSquare size={28} />,
               title: 'Personalised Reply',
-              desc: 'AI drafts and sends a contextual, personalised reply — in English or Chinese — within minutes. No templates, every response is unique.',
+              desc: 'AI drafts and sends a contextual, personalised reply in English or Chinese within minutes. No templates, every response is unique.',
               color: 'green'
             },
             {
@@ -189,12 +189,12 @@ export default function HomePage() {
             {
               icon: <Brain size={24} />,
               title: 'Intelligent Lead Scoring',
-              desc: '11-dimension rubric with 100-point scale. Budget, timeline, location preference, pre-approval status, and more — all extracted and scored automatically.',
+              desc: '11-dimension rubric with 100-point scale. Budget, timeline, location preference, pre-approval status, and more, all extracted and scored automatically.',
             },
             {
               icon: <Globe size={24} />,
               title: 'Bilingual Communication',
-              desc: 'Native English and Chinese support. AI detects language automatically and responds in kind — critical for multicultural markets.',
+              desc: 'Native English and Chinese support. AI detects language automatically and responds in kind, critical for multicultural markets.',
             },
             {
               icon: <Bot size={24} />,
@@ -235,10 +235,10 @@ export default function HomePage() {
         <motion.div className="screenshots__grid" variants={stagger}>
           {[
             { title: 'Dashboard', desc: 'At-a-glance metrics, recent agents, and quick actions', file: 'dashboard.png' },
-            { title: 'Visual Flow Builder', desc: 'Drag-and-drop conversation flows with 33+ node types for lead qualification', file: 'flow-editor.png' },
-            { title: 'Agent Builder', desc: 'Create agents from templates — lead qualification, inspection booking, and more', file: 'agents.png' },
+            { title: 'Visual Flow Builder', desc: 'Drag-and-drop conversation flows with 33+ node types for lead qualification', file: 'flow-editor-booking.png' },
+            { title: 'Agent Builder', desc: 'Create agents from templates: lead qualification, inspection booking, and more', file: 'agents.png' },
             { title: 'Analytics', desc: 'Call volume, success rates, duration trends, and latency tracking', file: 'analytics.png' },
-            { title: 'Email AI', desc: 'Automated email processing with qualification status filtering', file: 'email.png' },
+            { title: 'Calendar', desc: 'Integrated scheduling for inspections, follow-ups, and team coordination', file: 'calendar.png' },
             { title: 'Billing & Pricing', desc: 'Transparent usage-based pricing with real-time cost tracking', file: 'billing.png' },
           ].map((s, i) => (
             <motion.div key={i} className="screenshot-card" variants={fadeUp}>

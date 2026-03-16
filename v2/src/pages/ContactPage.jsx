@@ -25,7 +25,7 @@ export default function ContactPage() {
           transition={{ duration: 0.6 }}
         >
           <h1>Get in Touch</h1>
-          <p>Whether you're ready to start or just exploring — we'd love to hear from you.</p>
+          <p>Whether you're ready to start or just exploring,we'd love to hear from you.</p>
         </motion.div>
 
         <div className="contact-page__grid">
