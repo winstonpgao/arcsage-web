@@ -1,0 +1,485 @@
+:root {
+  /* Global Dark Theme Tokens */
+  --color-background: #000000;
+  --color-surface: #1D1D1F;
+  --color-surface-transparent: rgba(29, 29, 31, 0.7);
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A1A1AA;
+  --color-accent: #8B5CF6;
+  /* Violet-500 */
+  --color-accent-hover: #7C3AED;
+  /* Violet-600 */
+  --color-border: #27272A;
+
+  /* Light Mode Tokens (kept for reference or specific areas) */
+  --color-background-light: #FFFFFF;
+  --color-surface-light: #F5F5F7;
+  --color-text-primary-light: #1D1D1F;
+  --color-text-secondary-light: #86868B;
+
+  --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);
+  /* Violet to Pink */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-padding {
+  padding: 120px 0;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 56px;
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: 48px;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+p {
+  font-size: 19px;
+  /* Apple standard body size for marketing */
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 17px;
+  font-weight: 500;
+  transition: var(--transition-base);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #8B5CF6 0%, #F472B6 100%);
+  /* Violet Gradient */
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.5);
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background-color: rgba(0, 113, 227, 0.1);
+  color: var(--color-accent);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(0, 113, 227, 0.15);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   MOBILE & TABLET RESPONSIVE STYLES
+   ============================================ */
+
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .section-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* Carousel Responsive Styles */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.carousel-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px;
+}
+
+.carousel-text {
+  flex: 1;
+  padding-right: 60px;
+  z-index: 2;
+}
+
+.carousel-image {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.carousel-nav-button.left {
+  left: 20px;
+}
+
+.carousel-nav-button.right {
+  right: 20px;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90%;
+}
+
+/* Tablet Styles (iPad, up to 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .section-padding {
+    padding: 80px 0;
+  }
+
+  h1 {
+    font-size: 48px;
+  }
+
+  h2 {
+    font-size: 40px;
+  }
+
+  h3 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  /* Carousel adjustments for tablet */
+  .carousel-container {
+    height: 500px;
+  }
+
+  .carousel-content {
+    padding: 40px;
+  }
+
+  .carousel-text {
+    padding-right: 40px;
+  }
+
+  .carousel-nav-button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Mobile Styles (iPhone, up to 768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .section-padding {
+    padding: 60px 0;
+  }
+
+  h1 {
+    font-size: 36px;
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  /* About page values grid - single column on mobile */
+  .values-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* Specialties grid - single column on mobile */
+  .specialties-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .values-grid > div {
+    padding: 24px !important;
+  }
+
+  .values-grid h3 {
+    font-size: 22px !important;
+  }
+
+  .values-grid p {
+    font-size: 16px !important;
+  }
+
+  /* About page section adjustments for mobile */
+  .about-section {
+    padding: 48px 0 !important;
+  }
+
+  .about-section h2 {
+    font-size: 28px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .about-section .subtitle {
+    font-size: 16px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .about-section .content {
+    font-size: 16px !important;
+  }
+
+  /* Stack elements vertically on mobile */
+  .flex-desktop {
+    flex-direction: column !important;
+  }
+
+  /* Carousel mobile optimization */
+  .carousel-container {
+    height: auto;
+    min-height: 500px;
+    border-radius: 16px;
+  }
+
+  .carousel-content {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .carousel-text {
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .carousel-text h3 {
+    font-size: 24px !important;
+  }
+
+  .carousel-text h4 {
+    font-size: 18px !important;
+  }
+
+  .carousel-text p {
+    font-size: 15px !important;
+  }
+
+  .carousel-image {
+    width: 100%;
+    height: 250px;
+    flex: none;
+  }
+
+  .carousel-nav-button {
+    display: none;
+    /* Hide arrow buttons on mobile */
+  }
+
+  .carousel-dots {
+    bottom: 20px;
+    gap: 8px;
+  }
+
+  /* Integrations grid - 2 columns on mobile */
+  .integrations-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+}
+
+/* Small Mobile (iPhone SE, small phones) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .section-padding {
+    padding: 48px 0;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    /* Full width buttons on small screens */
+  }
+
+  /* Carousel further optimization */
+  .carousel-container {
+    min-height: 450px;
+  }
+
+  .carousel-content {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .carousel-text h3 {
+    font-size: 20px !important;
+  }
+
+  .carousel-text h4 {
+    font-size: 16px !important;
+  }
+
+  .carousel-text p {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .carousel-image {
+    height: 200px;
+  }
+
+  .carousel-dots {
+    gap: 6px;
+    bottom: 16px;
+  }
+
+  /* Integrations - keep 2 columns but reduce sizes */
+  .integrations-grid {
+    gap: 16px !important;
+  }
+}

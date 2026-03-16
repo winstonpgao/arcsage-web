@@ -1,0 +1,97 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const Section = ({ id, title, subtitle, children, background = "white", theme = "light", image = null, imagePosition = "right", enableAnimation = true, style = {} }) => {
+    const isDark = theme === "dark";
+    const isGray = background === "gray";
+    const isTransparent = background === "transparent";
+
+    const bgColor = isTransparent ? "transparent" : (isDark ? "var(--color-background-dark)" : (isGray ? "var(--color-background)" : "var(--color-surface)"));
+    const textColor = isDark ? "var(--color-text-primary-dark)" : "var(--color-text-primary)";
+    const subTextColor = isDark ? "var(--color-text-secondary-dark)" : "var(--color-text-secondary)";
+
+    return (
+        <section id={id} className="section-padding" style={{
+            backgroundColor: bgColor,
+            color: textColor,
+            borderTop: isDark ? "none" : "1px solid var(--color-border)",
+            ...style
+        }}>
+            <div className="container">
+                <div className={image ? "section-grid" : ""}>
+                    <div style={{ order: image && imagePosition === "left" ? 2 : 1 }}>
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            variants={{
+                                hidden: { opacity: 0, y: 30 },
+                                visible: {
+                                    opacity: 1,
+                                    y: 0,
+                                    transition: {
+                                        duration: 0.8,
+                                        ease: [0.22, 1, 0.36, 1],
+                                        staggerChildren: 0.15
+                                    }
+                                }
+                            }}
+                            style={{ maxWidth: image ? '100%' : '800px', margin: image ? '0' : '0 auto 32px' }}
+                        >
+                            {title && <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} style={{ marginBottom: '24px' }}>{title}</motion.h2>}
+                            {subtitle && <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} style={{ fontSize: '21px', lineHeight: '1.5', color: subTextColor, marginBottom: image ? '32px' : '0' }}>{subtitle}</motion.p>}
+                        </motion.div>
+
+                        {enableAnimation ? (
+                            <motion.div
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                variants={{
+                                    hidden: { opacity: 0, y: 20 },
+                                    visible: {
+                                        opacity: 1,
+                                        y: 0,
+                                        transition: {
+                                            duration: 0.8,
+                                            ease: [0.22, 1, 0.36, 1], // Custom easeOutQuint-like curve
+                                            delay: 0.1,
+                                            staggerChildren: 0.15
+                                        }
+                                    }
+                                }}
+                            >
+                                {children}
+                            </motion.div>
+                        ) : (
+                            <div>{children}</div>
+                        )}
+                    </div>
+
+                    {image && (
+                        <motion.div
+                            style={{ order: imagePosition === "left" ? 1 : 2 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <img
+                                src={image}
+                                alt={title}
+                                style={{
+                                    maxWidth: '100%',
+                                    borderRadius: '24px',
+                                    boxShadow: 'var(--shadow-lg)',
+                                    filter: 'brightness(0.85)' // Darken bright UI screenshots
+                                }}
+                            />
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Section;
