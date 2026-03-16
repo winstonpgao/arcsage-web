@@ -77,7 +77,7 @@ export default function HomePage() {
                 <div className="hero__stat-row">
                   <StatCard label="Leads Processed" value="25,000+" icon={<Users size={20} />} color="blue" />
                   <StatCard label="Qualified" value="26" icon={<Target size={20} />} color="green" />
-                  <StatCard label="Response Time" value="< 2 min" icon={<Clock size={20} />} color="purple" />
+                  <StatCard label="Response Time" value="< 90s" icon={<Clock size={20} />} color="purple" />
                   <StatCard label="Coverage" value="24/7" icon={<Globe size={20} />} color="orange" />
                 </div>
                 <div className="hero__preview-row">
@@ -119,7 +119,7 @@ export default function HomePage() {
           {[
             { value: '25,000+', label: 'Leads processed', icon: <Users size={24} /> },
             { value: '24/7', label: 'Automated coverage', icon: <Clock size={24} /> },
-            { value: '< 2 min', label: 'Average response time', icon: <Zap size={24} /> },
+            { value: '< 90s', label: 'Average response time', icon: <Zap size={24} /> },
             { value: '11', label: 'Scoring dimensions', icon: <BarChart3 size={24} /> },
           ].map((m, i) => (
             <motion.div key={i} className="metric-card" variants={fadeUp}>
