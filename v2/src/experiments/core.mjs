@@ -20,7 +20,7 @@ export function createExperiment({ config, storage, crypto, transport, now = () 
   if (!config.enabled) return off(config.reason || 'disabled');
   if (!storage || !crypto?.randomUUID || !crypto?.getRandomValues) return off('assignment_unavailable');
   const assignmentKey = `arcsage:assignment:${config.id}`;
-  const queueKey = `arcsage:events:${config.id}`;
+  const eventPrefix = `arcsage:event:${config.id}:`;
   let assignment;
   try {
     const saved = JSON.parse(storage.getItem(assignmentKey) || 'null');
@@ -32,44 +32,65 @@ export function createExperiment({ config, storage, crypto, transport, now = () 
       storage.setItem(assignmentKey, JSON.stringify(assignment));
     }
   } catch { return off('storage_unavailable'); }
-  let queue = [];
-  try {
-    const saved = JSON.parse(storage.getItem(queueKey) || '[]');
-    if (Array.isArray(saved)) queue = saved.filter(e => e?.experiment_id === config.id && e.visitor_id === assignment.visitor_id &&
-      e.variant === assignment.variant && UUID.test(e.event_id || '') && allowedEvents.has(e.event_name)).slice(-50);
-  } catch { /* Corrupted queue is not treated as measured traffic. */ }
+  // One key per event makes concurrent tab writes independent. Never replace a shared queue.
+  const pending = new Map();
+  const acknowledged = new Set();
+  const validEvent = e => e?.experiment_id === config.id && e.visitor_id === assignment.visitor_id &&
+    e.variant === assignment.variant && UUID.test(e.event_id || '') && allowedEvents.has(e.event_name);
+  const readPending = () => {
+    try {
+      const keys = Array.from({ length: storage.length }, (_, i) => storage.key(i)).filter(k => k?.startsWith(eventPrefix));
+      for (const key of keys) {
+        try {
+          const event = JSON.parse(storage.getItem(key));
+          if (validEvent(event) && key === eventPrefix + event.event_id && !acknowledged.has(event.event_id)) pending.set(event.event_id, event);
+        } catch { /* Ignore invalid journal entries without deleting another tab's data. */ }
+      }
+    } catch { /* Retain this controller's memory if storage becomes unavailable. */ }
+    return [...pending.values()].sort((a, b) => a.occurred_at.localeCompare(b.occurred_at) ||
+      (a.event_name === b.event_name ? a.event_id.localeCompare(b.event_id) : a.event_name === 'exposure' ? -1 : 1));
+  };
+  const persistEvent = event => {
+    pending.set(event.event_id, event);
+    try { storage.setItem(eventPrefix + event.event_id, JSON.stringify(event)); } catch { /* Remains in this tab's memory. */ }
+  };
   let inFlight;
-  const persist = () => { try { storage.setItem(queueKey, JSON.stringify(queue)); } catch { /* Queue remains in memory. */ } };
   const flush = () => {
     if (inFlight) return inFlight;
-    inFlight = (async () => {
+    inFlight = Promise.resolve().then(async () => {
       let sent = false;
-      while (queue.length) {
+      while (true) {
+        const event = readPending()[0];
+        if (!event) break;
         let ok = false;
-        try { ok = await transport(config.endpoint, queue[0]); } catch { break; }
+        try { ok = await transport(config.endpoint, event); } catch { break; }
         if (!ok) break;
-        queue.shift(); persist(); sent = true;
+        pending.delete(event.event_id); acknowledged.add(event.event_id);
+        try { storage.removeItem(eventPrefix + event.event_id); } catch { /* A future reload may safely retry this ID. */ }
+        sent = true;
       }
       return sent;
-    })().finally(() => { inFlight = undefined; });
+    }).finally(() => { inFlight = undefined; });
     return inFlight;
   };
-  let exposureRecorded = queue.some(e => e.event_name === 'exposure');
+  let exposureRecorded = readPending().some(e => e.event_name === 'exposure');
   const track = (eventName, path = '/contact') => {
     if (!allowedEvents.has(eventName)) return Promise.resolve(false);
     if (eventName === 'exposure' && exposureRecorded) return flush();
-    if (eventName === 'contact_intent' && !exposureRecorded) {
-      queue.push({ ...assignment, event_id: crypto.randomUUID(), event_name: 'exposure', occurred_at: now().toISOString(), path: '/contact' });
-      delete queue.at(-1).assigned_at;
+    const needsExposure = eventName === 'contact_intent' && !exposureRecorded;
+    // At capacity, refuse new events instead of deleting unacknowledged older events.
+    if (readPending().length + (needsExposure ? 2 : 1) > 50) return flush();
+    if (needsExposure) {
+      persistEvent({ experiment_id: config.id, variant: assignment.variant, visitor_id: assignment.visitor_id,
+        event_id: crypto.randomUUID(), event_name: 'exposure', occurred_at: now().toISOString(), path: '/contact' });
       exposureRecorded = true;
     }
     const safePath = typeof path === 'string' && path.startsWith('/') ? path.split(/[?#]/)[0].slice(0, 200) : '/contact';
-    queue.push({ experiment_id: config.id, variant: assignment.variant, visitor_id: assignment.visitor_id,
+    persistEvent({ experiment_id: config.id, variant: assignment.variant, visitor_id: assignment.visitor_id,
       event_id: crypto.randomUUID(), event_name: eventName, occurred_at: now().toISOString(), path: safePath });
     if (eventName === 'exposure') exposureRecorded = true;
-    // Preserve the exposure at the front when trimming so an intent never loses its attribution prerequisite.
-    if (queue.length > 50) queue.splice(1, queue.length - 50);
-    persist(); return flush();
+    // An append during the previous drain's completion must get its own drain.
+    return inFlight ? inFlight.then(async sent => (await flush()) || sent) : flush();
   };
   return { active: true, variant: assignment.variant, reason: 'enabled', track, flush };
 }

@@ -24,6 +24,16 @@ Open `http://127.0.0.1:8000/contact/`. The first eligible browser receives A or 
 
 An email click indicates intent, not mailbox delivery. The page says it opens an email application; no fake success state remains. Other published email links are not this primary CTA and do not count as its numerator.
 
+Each queued event has its own local storage key, so concurrent tabs cannot replace a shared array. Reloading any route retries saved events. Only the collector's JSON acceptance acknowledgment removes an event; HTML fallbacks and health responses are retained for retry. The journal admits at most 50 pending events per controller; at capacity it retains older events and stops admitting new ones. Storage blocking or quota failures, long outages, browser deletion and closing a tab with only memory storage can still lose measurements. Collection quality checks cannot detect every missing event.
+
+For repeatable isolated browser QA, stop other servers using ports 8000 and 8767, build with the local enabled settings above, then run:
+
+```sh
+QA_OUTPUT=/private/tmp/arcsage-source-qa node scripts/check-browser.mjs
+```
+
+The script requires Node 22+, Python 3 and an installed Chrome. On platforms with another Chrome location, set `CHROME_PATH` to its executable. It owns and stops its local server, collector and disposable browser; its report token remains in memory. It checks desktop/mobile pages, both variants, collector restart and retry after reloading another route. The test intercepts mailto navigation and sends no email. Output is QA evidence, not customer outcomes. Restore `npm run build` without enabled overrides before shipping the default-off build.
+
 ## Read the report
 
 Reports are disabled until configured with a secret. Follow [collector instructions](collector/README.md) to enable and export an authenticated JSON report. Keep that token out of browser variables and URLs. Analyze the saved operator report:
