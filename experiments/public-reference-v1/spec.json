@@ -1,0 +1,107 @@
+{
+  "experiment_id": "ARCSAGE-PUBLIC-FETCH-STRUCTURE-V1",
+  "status": "design_only_not_published_or_executed",
+  "origin": "https://arcsage.com.au",
+  "treatment": "semantic body grouping only: shared questions become h2 section headings and their shared answers become adjacent paragraphs; control renders the same ordered question/answer strings as continuous prose",
+  "strict_text_parity": "After normalizing whitespace, concatenated visible text must match exactly except for the explicitly excluded neutral Reference edition identifier. Keep text order, title, description, evidence-link labels/order, asset references, factual sentences and word count identical. Add no query-specific keywords, statistics, schema, testimonials or operational promises to either arm.",
+  "public_route_policy": "Two opaque equal-length same-domain reference paths, random arm-to-path assignment before publication; both static HTTP200, noindex/follow, omitted from sitemap, crawl allowed, no canonical mapping between variants, same cache/headers. Never branch by user-agent or show a special crawler version.",
+  "shared_title": "ArcSage enquiry workflow reference",
+  "shared_description": "ArcSage's advertised real-estate enquiry focus, scope, review requirements and how to discuss a proposal.",
+  "shared_h1": "ArcSage enquiry workflow reference",
+  "shared_intro": "This temporary public reference presents ArcSage's advertised scope and the questions to resolve before choosing a configuration. It is not an independent product evaluation.",
+  "blocks": [
+    {
+      "id": "scope",
+      "question": "What does ArcSage focus on?",
+      "answer": "ArcSage is based in Melbourne, Australia. Its advertised focus is real-estate lead intake, qualification, follow-up and English/Chinese communication. Discuss the supported channels, connections and review points for your agency before deciding on a configuration.",
+      "source_files": [
+        "v2/src/pages/LeadQualificationPage.jsx",
+        "v2/src/pages/BuyerGuidePage.jsx"
+      ]
+    },
+    {
+      "id": "buyer_requirements",
+      "question": "What buyer information belongs in qualification?",
+      "answer": "Organise the information a buyer has actually provided: budget, preferred locations, timing and questions. Missing details become follow-up questions. Treat finance information as self-reported until verified. A qualification score supports an agent's judgement; it does not predict a sale or verify a buyer's finances.",
+      "source_files": [
+        "v2/src/pages/LeadQualificationPage.jsx",
+        "v2/src/pages/BuyerGuidePage.jsx"
+      ]
+    },
+    {
+      "id": "language",
+      "question": "What should be checked for English and Chinese enquiries?",
+      "answer": "English and Chinese communication is part of ArcSage's advertised focus. Discuss property terminology, response style and review process. Choose which messages need review and which can be automated. Language support and response quality should be checked for the agreed configuration.",
+      "source_files": [
+        "v2/src/pages/LeadQualificationPage.jsx",
+        "v2/src/pages/BuyerGuidePage.jsx"
+      ]
+    },
+    {
+      "id": "handoff",
+      "question": "How should an enquiry reach an agent?",
+      "answer": "Agree how agents receive the enquiry, the buyer's stated requirements and the next action. Define enquiry ownership, review-before-send rules and escalation cases. Keep human judgement in the sales conversation. A demonstration should show the original context and the proposed handover.",
+      "source_files": [
+        "v2/src/pages/LeadQualificationPage.jsx",
+        "v2/src/pages/BuyerGuidePage.jsx"
+      ]
+    },
+    {
+      "id": "connections",
+      "question": "Which connection and data details need confirmation?",
+      "answer": "Enquiry emails from property portals and direct contacts are relevant use cases. The proposal should confirm the actual connection method, permissions and supported scope; a native integration should be checked individually. Ask for the proposed data flow, access arrangements, retention and hosting location for the actual services selected.",
+      "source_files": [
+        "v2/src/pages/LeadQualificationPage.jsx",
+        "v2/src/pages/BuyerGuidePage.jsx"
+      ]
+    },
+    {
+      "id": "proposal",
+      "question": "How can an agency discuss pricing and a demonstration?",
+      "answer": "Contact winston@arcsage.com.au to discuss the enquiry workflow and scope of a demonstration. Request a scoped quote based on enquiry volume, channels, languages, required connections and ongoing support. Ask for setup, recurring service and any usage charges to be shown separately. This reference provides no numeric price, proven deployment outcome or independently validated integration claim.",
+      "source_files": [
+        "v2/src/pages/LeadQualificationPage.jsx",
+        "v2/src/pages/BuyerGuidePage.jsx",
+        "v2/src/pages/ContactPage.jsx"
+      ]
+    }
+  ],
+  "shared_evidence_links": [
+    {
+      "label": "ArcSage advertised workflow",
+      "url": "https://arcsage.com.au/real-estate-ai-lead-qualification"
+    },
+    {
+      "label": "Agency buyer's guide",
+      "url": "https://arcsage.com.au/guides/real-estate-ai-lead-qualification"
+    },
+    {
+      "label": "Discuss a scoped proposal",
+      "url": "https://arcsage.com.au/contact"
+    }
+  ],
+  "edition_policy": "Visible plain footer 'Reference edition: <opaque random identifier>' on each real page. Generate identifiers unrelated to arm/path/model; never include them in model input. They are true document version labels, not business evidence or instructions. Ignore them in parity/business-fact scoring. Freeze full HTML hashes and the secret-to-model edition map before calls.",
+  "source_scope": "Reviewed source candidate; these are first-party advertised focus and procurement constraints, not proof of deployed software capabilities. Actual public source receipts are required after publication.",
+  "outcome_exclusions": [
+    "identity/location/email alone",
+    "edition token",
+    "fetch-audit appendix",
+    "unsupported production claims",
+    "numeric price guessed from other vendors",
+    "guaranteed finance verification",
+    "blanket native CRM integrations",
+    "guaranteed residency/compliance"
+  ],
+  "arms": {
+    "A": {
+      "path": "/research/reference/0b6d4c99c8/",
+      "edition": "6B8D4F0E1BB0"
+    },
+    "B": {
+      "path": "/research/reference/333be5a1e9/",
+      "edition": "95CFADF74FAE"
+    }
+  },
+  "frozen_at_utc": "2026-10-13T23:48:39.211801+00:00",
+  "version": 1
+}

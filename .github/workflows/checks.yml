@@ -23,6 +23,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run check:static
+      - run: npm run check:public-reference
       - run: python3 -B -m unittest discover -s experiments -p 'test_analysis.py' -q
       - run: python3 -B -m unittest discover -s experiments/collector -p 'test_collector.py' -q
       - run: python3 -B -m unittest discover -s experiments/collector -p 'test_firestore_store.py' -q
