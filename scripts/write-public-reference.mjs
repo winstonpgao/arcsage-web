@@ -16,7 +16,8 @@ for(const [arm,details]of Object.entries(spec.arms)){
 <p>${esc(x.answer)}</p>
 </section>
 `).join('');
- const html=`<!doctype html><html lang="en"><head>${head}${style}</head><body>${header}<main class="geo-page">${lead}<div class="reference-body"><article id="reference-facts">${body}</article>${links}<footer class="reference-edition">Reference edition: ${esc(details.edition)}</footer></div></main></body></html>\n`;
+ const html=`<!doctype html><html lang="en"><head>${head}${style}</head><body>${header}<main class="geo-page">${lead}<div class="reference-body"><article id="reference-facts">${body}</article>
+${links}<footer class="reference-edition">Reference edition: ${esc(details.edition)}</footer></div></main></body></html>\n`;
  const dir=resolve(root,'dist'+details.path);await mkdir(dir,{recursive:true});await writeFile(resolve(dir,'index.html'),html);
 }
 console.log('Generated two fact-matched public reference editions; both noindex and excluded from sitemap.');

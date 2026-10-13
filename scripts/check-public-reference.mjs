@@ -7,7 +7,7 @@ const spec=JSON.parse(await readFile(resolve(root,'experiments/public-reference-
 const unescape=s=>s.replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&quot;','"');
 const normalize=s=>unescape(s.replace(/<[^>]+>/g,' ')).replace(/\s+/g,' ').trim();
 const expected=spec.blocks.map(x=>x.question+' '+x.answer).join(' ').replace(/\s+/g,' ').trim();
-const sitemap=await readFile(resolve(root,'dist/sitemap.xml'),'utf8');let headA;let checks=0;
+const sitemap=await readFile(resolve(root,'dist/sitemap.xml'),'utf8');let headA;let fullBodyA;let checks=0;
 for(const [arm,value]of Object.entries(spec.arms)){
  const html=await readFile(resolve(root,'dist'+value.path,'index.html'),'utf8');
  const article=html.match(/<article id="reference-facts">([\s\S]*?)<\/article>/)?.[1];
@@ -20,6 +20,8 @@ for(const [arm,value]of Object.entries(spec.arms)){
  assert.ok(!sitemap.includes(value.path));checks++;
  assert.ok(html.includes('Reference edition: '+value.edition));checks++;
  for(const link of spec.shared_evidence_links){assert.ok(html.includes('href="'+link.url+'"'));checks++;}
+ const fullBody=unescape(html.split('<body>')[1].split('</body>')[0].replace(/<footer class="reference-edition">[\s\S]*?<\/footer>/,'').replace(/<[^>]+>/g,'')).replace(/\s+/g,' ').trim();
+ if(fullBodyA===undefined)fullBodyA=fullBody;else{assert.equal(fullBody,fullBodyA);checks++;}
  const head=html.match(/<head>([\s\S]*?)<\/head>/)?.[1];if(headA===undefined)headA=head;else{assert.equal(head,headA);checks++;}
  for(const m of html.matchAll(/(?:href|src)="(\/assets\/[^"?#]+|\/logo\.jpeg)"/g)){await access(resolve(root,'dist'+m[1]));checks++;}
 }
