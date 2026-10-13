@@ -32,6 +32,7 @@ export default function Layout({ children }) {
           </Link>
           <nav className={`nav__links ${menuOpen ? 'nav__links--open' : ''}`}>
             <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Platform</Link>
+            <Link to="/real-estate-ai-lead-qualification" className={location.pathname.includes("lead-qualification") ? "active" : ""}>Solutions</Link>
             <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>About</Link>
             <Link to="/contact" className={location.pathname === '/contact' ? 'active' : ''}>Contact</Link>
           </nav>
@@ -59,9 +60,9 @@ export default function Layout({ children }) {
             </div>
             <div className="footer__col">
               <h4>Platform</h4>
-              <Link to="/">Features</Link>
-              <Link to="/">How It Works</Link>
-              <Link to="/">Pricing</Link>
+              <Link to="/real-estate-ai-lead-qualification">Lead qualification</Link>
+              <Link to="/guides/real-estate-ai-lead-qualification">Buyer guide</Link>
+              <Link to="/contact">Pricing</Link>
             </div>
             <div className="footer__col">
               <h4>Company</h4>
@@ -76,7 +77,7 @@ export default function Layout({ children }) {
           </div>
           <div className="footer__bottom">
             <p>&copy; {new Date().getFullYear()} ArcSage Technology Pty Ltd. All rights reserved.</p>
-            <p>ABN registered in Australia</p>
+            <Link to="/zh/real-estate-ai-lead-qualification">中文服务介绍</Link>
           </div>
         </div>
       </footer>

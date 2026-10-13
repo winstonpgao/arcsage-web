@@ -20,7 +20,7 @@ function Section({ children, className = '', id }) {
     <motion.section
       id={id}
       className={`section ${className}`}
-      initial="hidden"
+      initial={false}
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
       variants={stagger}
@@ -38,7 +38,7 @@ export default function HomePage() {
         <div className="container">
           <motion.div
             className="hero__content"
-            initial={{ opacity: 0, y: 40 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
@@ -62,7 +62,7 @@ export default function HomePage() {
           </motion.div>
           <motion.div
             className="hero__visual"
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >

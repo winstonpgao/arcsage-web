@@ -18,7 +18,7 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="container">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
@@ -38,7 +38,7 @@ export default function AboutPage() {
       {/* OUR STORY */}
       <motion.section
         className="section about-story"
-        initial="hidden"
+        initial={false}
         whileInView="visible"
         viewport={{ once: true }}
         variants={stagger}
@@ -72,7 +72,7 @@ export default function AboutPage() {
       {/* TEAM */}
       <motion.section
         className="section about-team"
-        initial="hidden"
+        initial={false}
         whileInView="visible"
         viewport={{ once: true }}
         variants={stagger}
@@ -140,7 +140,7 @@ export default function AboutPage() {
       {/* VALUES */}
       <motion.section
         className="section about-values"
-        initial="hidden"
+        initial={false}
         whileInView="visible"
         viewport={{ once: true }}
         variants={stagger}
@@ -185,7 +185,7 @@ export default function AboutPage() {
       {/* CTA */}
       <motion.section
         className="section final-cta"
-        initial="hidden"
+        initial={false}
         whileInView="visible"
         viewport={{ once: true }}
         variants={stagger}
