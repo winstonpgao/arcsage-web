@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
-  Mail, Brain, BarChart3, Clock, Users, Zap,
+  Mail, Brain, BarChart3, Users, Zap,
   ArrowRight, CheckCircle2, Globe, Shield, MessageSquare,
-  Phone, TrendingUp, Target, Bot, Sparkles
+  Phone, TrendingUp, Target, Sparkles
 } from 'lucide-react'
 
 const fadeUp = {
@@ -44,16 +44,16 @@ export default function HomePage() {
           >
             <div className="hero__badge">
               <Sparkles size={14} />
-              <span>Live with clients in production</span>
+              <span>Melbourne · English &amp; Chinese enquiries</span>
             </div>
             <h1>AI-Powered Lead Qualification for Real Estate</h1>
             <p className="hero__subtitle">
-              ArcSage automates lead intake, intelligent scoring, personalised follow-up,
-              and multilingual communication, so your agents focus on closing deals, not chasing leads.
+              Bring buyer requirements, follow-up and agent handover into a clear workflow.
+              Discuss an AI approach shaped around your enquiry sources, languages and agency criteria.
             </p>
             <div className="hero__ctas">
               <Link to="/contact" className="btn btn--primary btn--lg">
-                Start Qualifying Leads <ArrowRight size={18} />
+                Discuss Your Workflow <ArrowRight size={18} />
               </Link>
               <a href="#how-it-works" className="btn btn--outline btn--lg">
                 See How It Works
@@ -71,39 +71,38 @@ export default function HomePage() {
                 <div className="hero__dot hero__dot--red" />
                 <div className="hero__dot hero__dot--yellow" />
                 <div className="hero__dot hero__dot--green" />
-                <span>ArcSage Dashboard</span>
+                <span>Example enquiry workflow</span>
               </div>
               <div className="hero__mockup-body">
                 <div className="hero__stat-row">
-                  <StatCard label="Leads Processed" value="25,000+" icon={<Users size={20} />} color="blue" />
-                  <StatCard label="Qualified" value="26" icon={<Target size={20} />} color="green" />
-                  <StatCard label="Response Time" value="< 30s" icon={<Clock size={20} />} color="purple" />
-                  <StatCard label="Coverage" value="24/7" icon={<Globe size={20} />} color="orange" />
+                  <StatCard label="Intake source" value="Email" icon={<Mail size={20} />} color="blue" />
+                  <StatCard label="Buyer needs" value="Budget" icon={<Target size={20} />} color="green" />
+                  <StatCard label="Next action" value="Review" icon={<Users size={20} />} color="purple" />
+                  <StatCard label="Language scope" value="EN/ZH" icon={<Globe size={20} />} color="orange" />
                 </div>
                 <div className="hero__preview-row">
                   <div className="hero__email-preview">
                     <div className="hero__email-from">
-                      <Mail size={14} /> john.buyer@email.com
+                      <Mail size={14} /> Example buyer enquiry
                     </div>
-                    <div className="hero__email-subject">RE: 42 Oak Street, Glen Waverley</div>
+                    <div className="hero__email-subject">Property inspection enquiry</div>
                     <div className="hero__email-body">
-                      Hi, I'm interested in inspecting this property. My budget is around $1.2M and I'm pre-approved...
+                      I'm looking around Glen Waverley with a budget of $1.2M. Is an inspection available next week?
                     </div>
                   </div>
                   <div className="hero__score-preview">
                     <div className="hero__score-header">
-                      <Brain size={16} /> AI Qualification Score
+                      <Brain size={16} /> Qualification checklist
                     </div>
                     <div className="hero__score-value">
-                      <span className="hero__score-number">82</span>
-                      <span className="hero__score-max">/100</span>
+                      <span className="hero__score-number">Review</span>
                     </div>
-                    <div className="hero__score-badge hero__score-badge--qualified">Qualified Lead</div>
+                    <div className="hero__score-badge hero__score-badge--qualified">Buyer-stated details</div>
                     <div className="hero__score-dimensions">
-                      <ScoreDim label="Budget" value={90} />
-                      <ScoreDim label="Timeline" value={75} />
-                      <ScoreDim label="Location" value={85} />
-                      <ScoreDim label="Pre-approval" value={95} />
+                      <QualificationDetail label="Budget" value="Stated" />
+                      <QualificationDetail label="Location" value="Stated" />
+                      <QualificationDetail label="Buying timeline" value="Ask" />
+                      <QualificationDetail label="Finance status" value="Unknown" />
                     </div>
                   </div>
                 </div>
@@ -113,14 +112,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* METRICS BAR */}
+      {/* WORKFLOW OVERVIEW */}
       <Section className="metrics">
         <motion.div className="metrics__grid" variants={stagger}>
           {[
-            { value: '25,000+', label: 'Leads processed', icon: <Users size={24} /> },
-            { value: '24/7', label: 'Automated coverage', icon: <Clock size={24} /> },
-            { value: '< 30s', label: 'Average response time', icon: <Zap size={24} /> },
-            { value: '11', label: 'Scoring dimensions', icon: <BarChart3 size={24} /> },
+            { value: 'Intake', label: 'Agree your enquiry sources', icon: <Mail size={24} /> },
+            { value: 'Criteria', label: 'Define what matters to agents', icon: <Target size={24} /> },
+            { value: 'EN/ZH', label: 'Discuss language and review', icon: <Globe size={24} /> },
+            { value: 'Handover', label: 'Set ownership and next actions', icon: <Users size={24} /> },
           ].map((m, i) => (
             <motion.div key={i} className="metric-card" variants={fadeUp}>
               <div className="metric-card__icon">{m.icon}</div>
@@ -134,37 +133,37 @@ export default function HomePage() {
       {/* HOW IT WORKS */}
       <Section className="how-it-works" id="how-it-works">
         <motion.div className="section__header" variants={fadeUp}>
-          <h2>How It Works</h2>
-          <p>From inbox to qualified lead in minutes, not hours</p>
+          <h2>Shape Your Qualification Workflow</h2>
+          <p>Connect the enquiry, buyer context and next action around your agency's process</p>
         </motion.div>
         <motion.div className="steps" variants={stagger}>
           {[
             {
               step: '01',
               icon: <Mail size={28} />,
-              title: 'Lead Arrives',
-              desc: 'Enquiries from portals (REA, Domain) and direct emails are automatically captured and deduplicated across your entire database.',
+              title: 'Agree the Intake',
+              desc: 'Start with your enquiry emails and property-portal sources. Confirm the connection method, access and which enquiries belong in the workflow.',
               color: 'blue'
             },
             {
               step: '02',
               icon: <Brain size={28} />,
-              title: 'AI Analyses & Scores',
-              desc: 'Our LLM engine reads the enquiry, extracts intent, budget, timeline, and scores across 11 qualification dimensions with a 100-point rubric.',
+              title: 'Define Buyer Criteria',
+              desc: 'Organise stated budget, location, timing and questions against criteria your agency defines. Keep missing details visible for agent follow-up.',
               color: 'purple'
             },
             {
               step: '03',
               icon: <MessageSquare size={28} />,
-              title: 'Personalised Reply',
-              desc: 'AI drafts and sends a contextual, personalised reply in English or Chinese within minutes. No templates, every response is unique.',
+              title: 'Plan the Conversation',
+              desc: 'Discuss English and Chinese responses, property terminology and review points. Agree which messages need approval and where automation is appropriate.',
               color: 'green'
             },
             {
               step: '04',
               icon: <TrendingUp size={28} />,
-              title: 'Smart Follow-Up',
-              desc: 'Automated follow-up sequences nurture leads over time. Scores update dynamically as new information arrives. Qualified leads are flagged immediately.',
+              title: 'Set the Next Action',
+              desc: 'Define follow-up timing, enquiry ownership and escalation to an agent. Choose clear measures to evaluate whether the workflow helps your team.',
               color: 'orange'
             },
           ].map((s, i) => (
@@ -182,39 +181,39 @@ export default function HomePage() {
       <Section className="features">
         <motion.div className="section__header" variants={fadeUp}>
           <h2>Built for Real Estate Teams</h2>
-          <p>Every feature designed around how agencies actually work</p>
+          <p>Start with the requirements that make a qualification useful to your agents</p>
         </motion.div>
         <motion.div className="features__grid" variants={stagger}>
           {[
             {
               icon: <Brain size={24} />,
-              title: 'Intelligent Lead Scoring',
-              desc: '11-dimension rubric with 100-point scale. Budget, timeline, location preference, pre-approval status, and more, all extracted and scored automatically.',
+              title: 'Agency-Defined Criteria',
+              desc: 'Discuss budget, timing, location and buying requirements. Any scoring approach should show its criteria and support an agent’s judgement.',
             },
             {
               icon: <Globe size={24} />,
               title: 'Bilingual Communication',
-              desc: 'Native English and Chinese support. AI detects language automatically and responds in kind, critical for multicultural markets.',
+              desc: 'English and Chinese enquiries are part of our focus. Agree terminology, language preferences and a review process for your team’s responses.',
             },
             {
-              icon: <Bot size={24} />,
-              title: 'Voice AI Agents',
-              desc: 'Conversational voice agents for property inspections, follow-ups, and lead qualification calls. Built with Australian data residency.',
+              icon: <Users size={24} />,
+              title: 'Agent Handover',
+              desc: 'Plan how agents receive the buyer’s stated requirements, unanswered questions and next action, with clear ownership of each enquiry.',
             },
             {
               icon: <Shield size={24} />,
-              title: 'Australian Data Residency',
-              desc: 'All data processed and stored in Australia (GCP Melbourne region). Full compliance with Australian privacy regulations.',
+              title: 'Data & Access Requirements',
+              desc: 'Include hosting location, providers, access and retention in the proposal. Confirm the complete data flow for your chosen configuration before rollout.',
             },
             {
               icon: <Zap size={24} />,
-              title: 'Automated Follow-Up',
-              desc: 'Multi-stage follow-up sequences that adapt based on lead behaviour. No lead falls through the cracks.',
+              title: 'Follow-Up Rules',
+              desc: 'Define when to follow up, when to stop and when to bring in an agent. Review the supported channels and automation scope in your proposal.',
             },
             {
               icon: <BarChart3 size={24} />,
               title: 'Analytics & Reporting',
-              desc: 'Real-time dashboards showing lead pipeline, qualification rates, response metrics, and agent performance.',
+              desc: 'Agree a baseline and useful measures, such as information completeness, review time and qualified conversations. Define what each measure means before evaluating results.',
             },
           ].map((f, i) => (
             <motion.div key={i} className="feature-card" variants={fadeUp}>
@@ -229,17 +228,17 @@ export default function HomePage() {
       {/* PLATFORM SCREENSHOTS */}
       <Section className="screenshots" id="platform">
         <motion.div className="section__header" variants={fadeUp}>
-          <h2>The Platform</h2>
-          <p>A comprehensive suite for lead qualification and voice AI</p>
+          <h2>Explore the Platform</h2>
+          <p>Use these interface views to discuss your workflow; configuration is confirmed in your proposal</p>
         </motion.div>
         <motion.div className="screenshots__grid" variants={stagger}>
           {[
-            { title: 'Dashboard', desc: 'At-a-glance metrics, recent agents, and quick actions', file: 'dashboard.png' },
-            { title: 'Visual Flow Builder', desc: 'Drag-and-drop conversation flows with 33+ node types for lead qualification', file: 'flow-editor-booking.png' },
-            { title: 'Agent Builder', desc: 'Create agents from templates: lead qualification, inspection booking, and more', file: 'agents.png' },
-            { title: 'Notifications', desc: 'Real-time alerts for bookings, calls, and system events', file: 'notifications.png' },
-            { title: 'Calendar', desc: 'Integrated scheduling for inspections, follow-ups, and team coordination', file: 'calendar.png' },
-            { title: 'Billing & Pricing', desc: 'Transparent usage-based pricing with real-time cost tracking', file: 'billing.png' },
+            { title: 'Dashboard', desc: 'A workspace overview for discussing agents, templates and navigation', file: 'dashboard.png' },
+            { title: 'Visual Flow Builder', desc: 'A conversation-flow view for planning steps and handover points', file: 'flow-editor-booking.png' },
+            { title: 'Agent Builder', desc: 'An agent and template view to explore your proposed qualification workflow', file: 'agents.png' },
+            { title: 'Notifications', desc: 'A notification view to discuss which events should reach your team', file: 'notifications.png' },
+            { title: 'Calendar', desc: 'A calendar view for discussing inspection and follow-up requirements', file: 'calendar.png' },
+            { title: 'Billing', desc: 'A billing interface overview; request a quote for your agreed scope and usage', file: 'billing.png' },
           ].map((s, i) => (
             <motion.div key={i} className="screenshot-card" variants={fadeUp}>
               <div className="screenshot-card__img">
@@ -260,20 +259,20 @@ export default function HomePage() {
         </motion.div>
       </Section>
 
-      {/* TECH STACK / TRUST */}
+      {/* IMPLEMENTATION SCOPE */}
       <Section className="trust">
         <motion.div className="section__header" variants={fadeUp}>
-          <h2>Enterprise-Grade Infrastructure</h2>
-          <p>Built on trusted cloud platforms with security-first architecture</p>
+          <h2>Agree the Details Before Rollout</h2>
+          <p>A scoped proposal connects the workflow to your systems, review rules and data requirements</p>
         </motion.div>
         <motion.div className="trust__grid" variants={stagger}>
           {[
-            { label: 'Google Cloud Platform', sub: 'Melbourne Region (australia-southeast1)' },
-            { label: 'Vertex AI (Gemini)', sub: 'LLM processing in Australia' },
-            { label: 'Australian Data Residency', sub: 'All data stays in AU' },
-            { label: 'Microsoft 365 Integration', sub: 'Email via Microsoft Graph API' },
-            { label: 'PostgreSQL', sub: 'Structured data with JSONB' },
-            { label: 'Multi-LLM Architecture', sub: 'Google, OpenAI, Anthropic' },
+            { label: 'Enquiry Sources', sub: 'Channels and connection methods' },
+            { label: 'Qualification Criteria', sub: 'Buyer-stated facts and missing details' },
+            { label: 'Language & Review', sub: 'English, Chinese and approval points' },
+            { label: 'System Connections', sub: 'Supported scope and required access' },
+            { label: 'Hosting & Data Flow', sub: 'Location, providers and retention' },
+            { label: 'Evaluation Measures', sub: 'Baseline, definitions and review period' },
           ].map((t, i) => (
             <motion.div key={i} className="trust-card" variants={fadeUp}>
               <CheckCircle2 size={20} className="trust-card__check" />
@@ -290,24 +289,24 @@ export default function HomePage() {
       <Section className="use-cases">
         <motion.div className="section__header" variants={fadeUp}>
           <h2>Built for Real Estate</h2>
-          <p>Serving agencies across buyer acquisition, property management, and multi-office operations</p>
+          <p>Choose a focused enquiry process and confirm the scope with your team</p>
         </motion.div>
         <motion.div className="use-cases__grid" variants={stagger}>
           {[
             {
               icon: <Target size={28} />,
               title: 'Buyer Lead Qualification',
-              desc: 'Automatically score and qualify buyer enquiries from REA, Domain, and direct email. AI extracts budget, timeline, location preferences, and pre-approval status.',
+              desc: 'Start with buyer enquiries and organise stated budget, location, timing and questions. Portal emails and direct contacts are use cases to assess individually.',
             },
             {
               icon: <Phone size={28} />,
-              title: 'Voice AI for Inspections',
-              desc: 'Conversational AI agents handle inspection bookings, follow-up calls, and lead qualification over the phone. Australian voices, Australian data residency.',
+              title: 'Inspection Enquiry Follow-Up',
+              desc: 'Discuss how inspection questions reach the right agent and what information a reply needs. Any phone or scheduling connection requires an agreed scope.',
             },
             {
               icon: <Users size={28} />,
               title: 'Multi-Office Operations',
-              desc: 'Route leads to the right agent across multiple branches. Track performance per office, per agent, per campaign.',
+              desc: 'Agree enquiry ownership across agents or offices, handover details and escalation rules. Check the required system connections before implementation.',
             },
           ].map((u, i) => (
             <motion.div key={i} className="use-case-card" variants={fadeUp}>
@@ -322,11 +321,11 @@ export default function HomePage() {
       {/* FINAL CTA */}
       <Section className="final-cta">
         <motion.div className="final-cta__content" variants={fadeUp}>
-          <h2>Ready to Qualify Leads While You Sleep?</h2>
-          <p>Join agencies already using ArcSage to automate lead qualification and never miss a qualified buyer again.</p>
+          <h2>Give Your Enquiries a Clear Next Step</h2>
+          <p>Share your enquiry sources, languages and current process. We'll discuss a qualification workflow and a demonstration suited to your agency.</p>
           <div className="hero__ctas">
             <Link to="/contact" className="btn btn--primary btn--lg">
-              Get Started <ArrowRight size={18} />
+              Discuss a Demonstration <ArrowRight size={18} />
             </Link>
             <Link to="/about" className="btn btn--outline btn--lg">
               Learn About Our Team
@@ -348,15 +347,12 @@ function StatCard({ label, value, icon, color }) {
   )
 }
 
-function ScoreDim({ label, value }) {
+function QualificationDetail({ label, value }) {
   return (
     <div className="hero__score-dim">
       <div className="hero__score-dim-label">
         <span>{label}</span>
-        <span>{value}%</span>
-      </div>
-      <div className="hero__score-dim-bar">
-        <div className="hero__score-dim-fill" style={{ width: `${value}%` }} />
+        <span>{value}</span>
       </div>
     </div>
   )

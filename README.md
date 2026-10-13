@@ -13,9 +13,10 @@ npm run build
 npm run check:static
 python3 -B -m unittest discover -s experiments -p 'test_analysis.py' -q
 python3 -B -m unittest discover -s experiments/collector -p 'test_collector.py' -q
+python3 -B -m unittest discover -s experiments/collector -p 'test_firestore_store.py' -q
 ```
 
-Node 22 and Python 3.12 are used in the review CI. The browser assignment tests use Node's built-in runner; the collector and analysis use Python's standard library. No paid AI API is required for these checks.
+Node 22 and Python 3.12 are used in the review CI. The browser assignment tests use Node's built-in runner; the SQLite collector and analysis use Python's standard library. Firestore is an explicit optional backend with a pinned official SDK; CI runs its pure checks while emulator cases are explicitly skipped. No paid AI API is required for these checks.
 
 Preview actual built routes:
 
@@ -27,17 +28,17 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 
 The browser test varies one factor on `/contact`: A **Email us**, B **Discuss lead qualification**. Factual copy, destination and layout are shared. Assignment uses a cryptographically random browser ID/variant stored for repeat visits. Exposure is recorded only after the client restores its assignment; a click records contact intent. Events use retained IDs and ordered retry transport.
 
-The endpoint stores actual exposures and intents in SQLite, deduplicates retries, excludes conflicting visitors and protects its administrative report. An empty store has no seeded outcomes. The contact action opens the visitor's email application and does not pretend a message was delivered.
+The endpoint supports SQLite or an explicitly configured Firestore backend for exposures and intents, deduplicates retries, excludes conflicting visitors and protects its administrative report. An empty store has no seeded outcomes. The contact action opens the visitor's email application and does not pretend a message was delivered.
 
 **The A/B feature defaults off.** Activation needs a collector endpoint with durable storage, the actual site origin configured there, and the locked measurement plan reviewed before public enrolment. Preview QA uses a separate disposable store and is not mixed with customer data.
 
-See [collector and hosting instructions](experiments/collector/README.md), [experiment plan](experiments/contact-cta-v1/plan.json), and [analysis instructions](experiments/README.md). SQLite needs a suitable persistent local disk; this implementation is not a durable Cloud Run backend.
+See [collector and hosting instructions](experiments/collector/README.md), [experiment plan](experiments/contact-cta-v1/plan.json), and [analysis instructions](experiments/README.md). SQLite needs a suitable persistent local disk. The optional transactional Firestore backend passed local emulator persistence/attribution checks; its supported pilot is one collector instance. Cloud deployment, IAM and managed-service recovery remain unverified; see [Firestore evidence](experiments/collector/FIRESTORE_TEST_RESULTS.md).
 
 ## SEO and GEO effectiveness
 
 Readable HTML, useful buying information and correct route responses improve technical access. They do not guarantee indexing or AI citations. The visitor A/B test measures contact intent; public AI discovery needs a separate fixed-question, repeated observation protocol. That research, baseline, change records, reviews and source catalog are maintained in [the GEO repository](https://github.com/winstonpgao/GEO).
 
-New page copy uses documented service positioning and avoids invented performance figures, prices or testimonials. Existing legacy marketing assertions are not verified by this website build. Keep their product evidence review separate from whether the code renders.
+New page copy uses documented service positioning and avoids invented performance figures, prices or testimonials. Home and About now replace unsupported customer-volume, latency, production and residency assertions with scope and evaluation criteria. Existing interface screenshots remain illustrations; names, team roles and location remain self-reported. Keep their product evidence review separate from whether the code renders.
 
 ## Release behavior
 

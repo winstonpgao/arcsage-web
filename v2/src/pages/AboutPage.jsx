@@ -24,8 +24,8 @@ export default function AboutPage() {
           >
             <h1>Building Intelligent Systems for Real Estate</h1>
             <p className="about-hero__subtitle">
-              We combine deep expertise in AI, data science, and enterprise automation
-              to help real estate agencies qualify leads faster and smarter.
+              We focus on AI, data and automation for property enquiry workflows,
+              with English and Chinese communication and clear agent handover.
             </p>
             <div className="about-hero__meta">
               <span><Calendar size={16} /> Founded 2025</span>
@@ -49,21 +49,20 @@ export default function AboutPage() {
           </motion.div>
           <motion.div className="about-story__content" variants={fadeUp}>
             <p>
-              ArcSage was born from a simple observation: real estate agencies spend countless hours
-              manually sorting through thousands of email enquiries, trying to identify which leads
-              are genuinely ready to buy. Most of this work is repetitive, time-sensitive, and
-              happens across multiple languages and time zones.
+              A property enquiry can contain a preferred area, a budget, a question about an inspection
+              or only a few details. ArcSage's focus is helping real estate teams connect that information
+              to a useful next conversation, including when buyers prefer English or Chinese.
             </p>
             <p>
-              We saw an opportunity to apply modern AI including large language models, intelligent scoring
-              systems, and conversational voice agents to solve this problem at scale. Not as a
-              generic chatbot, but as a purpose-built platform that understands the nuances of
-              real estate: property preferences, budget signals, pre-approval status, and cultural context.
+              Our approach starts with the agency's process: where enquiries arrive, which buyer
+              requirements matter, who reviews a response and how the next action reaches an agent.
+              AI can help organise stated information; missing details need follow-up, and finance
+              information remains self-reported until verified.
             </p>
             <p>
-              Today, ArcSage is live in production, processing over 25,000 leads for Australian
-              real estate agencies. Our platform handles the entire qualification pipeline,from
-              initial enquiry to scored lead to personalised follow-up. In minutes, not days.
+              A focused demonstration and scoped proposal help turn those requirements into an
+              implementation plan. We discuss the supported connections, languages, review points
+              and data requirements with your team, then agree how a workflow would be evaluated.
             </p>
           </motion.div>
         </div>
@@ -80,7 +79,7 @@ export default function AboutPage() {
         <div className="container">
           <motion.div className="section__header" variants={fadeUp}>
             <h2>Our Team</h2>
-            <p>Engineers and data scientists building at the intersection of AI and real estate</p>
+            <p>Technical and business perspectives on your agency's enquiry workflow</p>
           </motion.div>
           <motion.div className="team__grid" variants={stagger}>
             <motion.div className="team-card" variants={fadeUp}>
@@ -88,10 +87,9 @@ export default function AboutPage() {
               <h3>Winston Gao</h3>
               <span className="team-card__role">Co-Founder & CTO</span>
               <p>
-                AI and data engineer with deep experience in enterprise AI systems, ML infrastructure,
-                and automation platforms. Background spanning data analytics, cloud architecture (GCP),
-                and full-stack development. Leads ArcSage's technical vision, from LLM pipeline design
-                to voice AI agent development.
+                Leads ArcSage's technical planning, with a focus on AI and data workflows,
+                system connections and application development. Works on translating enquiry
+                requirements into a proposed architecture and review process.
               </p>
               <div className="team-card__skills">
                 <span>AI/ML Engineering</span>
@@ -105,9 +103,9 @@ export default function AboutPage() {
               <h3>Iris Wang</h3>
               <span className="team-card__role">Co-Founder & CEO</span>
               <p>
-                Business strategist with extensive experience in real estate operations, client management,
-                and go-to-market execution. Deep understanding of the Australian property market, multicultural
-                buyer dynamics, and agency workflows. Drives ArcSage's product-market fit and customer relationships.
+                Leads ArcSage's business direction, with a focus on agency workflows,
+                buyer communication and client requirements. Brings the business perspective
+                to discussions about the proposed service scope and next steps.
               </p>
               <div className="team-card__skills">
                 <span>Business Strategy</span>
@@ -118,7 +116,7 @@ export default function AboutPage() {
             </motion.div>
           </motion.div>
           <motion.div className="team__collective" variants={fadeUp}>
-            <h3>Collective Expertise</h3>
+            <h3>Areas of Focus</h3>
             <div className="team__expertise-grid">
               {[
                 'Applied Data Science',
@@ -126,7 +124,7 @@ export default function AboutPage() {
                 'Voice AI & Conversational AI',
                 'Cloud Infrastructure (GCP)',
                 'Enterprise Automation',
-                'Real Estate Domain Knowledge',
+                'Real Estate Workflows',
                 'Multilingual NLP (EN/ZH)',
                 'Data Warehouse Design',
               ].map((skill, i) => (
@@ -154,22 +152,22 @@ export default function AboutPage() {
               {
                 icon: <Lightbulb size={28} />,
                 title: 'Innovation',
-                desc: 'We push boundaries with cutting-edge AI while keeping solutions practical and production-ready.',
+                desc: 'Start with a practical agency problem, explore a focused AI workflow and evaluate it against agreed criteria.',
               },
               {
                 icon: <Heart size={28} />,
                 title: 'Human-Centric',
-                desc: 'Technology should amplify human capability, not replace it. We build tools that make agents better at their jobs.',
+                desc: 'Keep agents involved in review and buyer conversations, with useful context and clear responsibility for the next action.',
               },
               {
                 icon: <Eye size={28} />,
                 title: 'Clarity',
-                desc: 'We turn complex data into clear, actionable insights. No black boxes, every score is explainable.',
+                desc: 'Agree qualification criteria and show the information behind a proposed next action. Keep unknown details separate from stated facts.',
               },
               {
                 icon: <Shield size={28} />,
                 title: 'Trust & Privacy',
-                desc: 'Australian data residency, transparent AI, and ethical practices. We handle your data with the care it deserves.',
+                desc: 'Confirm data flow, hosting, access and retention for the proposed configuration, with review points defined before rollout.',
               },
             ].map((v, i) => (
               <motion.div key={i} className="value-card" variants={fadeUp}>
@@ -192,8 +190,8 @@ export default function AboutPage() {
       >
         <div className="container">
           <motion.div className="final-cta__content" variants={fadeUp}>
-            <h2>Want to See ArcSage in Action?</h2>
-            <p>We'd love to walk you through the platform and discuss how it fits your agency.</p>
+            <h2>Explore a Workflow for Your Agency</h2>
+            <p>Discuss your enquiry process, the scope of a demonstration and the requirements that matter to your team.</p>
             <Link to="/contact" className="btn btn--primary btn--lg">
               Get in Touch <ArrowRight size={18} />
             </Link>

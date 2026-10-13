@@ -25,3 +25,4 @@ jobs:
       - run: npm run check:static
       - run: python3 -B -m unittest discover -s experiments -p 'test_analysis.py' -q
       - run: python3 -B -m unittest discover -s experiments/collector -p 'test_collector.py' -q
+      - run: python3 -B -m unittest discover -s experiments/collector -p 'test_firestore_store.py' -q

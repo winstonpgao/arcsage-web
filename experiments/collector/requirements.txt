@@ -1,0 +1,3 @@
+# Optional locally; installed in Docker for explicit Firestore deployment.
+# SQLite never imports this SDK and remains standard-library only.
+google-cloud-firestore==2.34.1

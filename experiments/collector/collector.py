@@ -16,6 +16,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from firestore_store import FirestoreEventConflict, StorageUnavailable, validate_target
+
 EXPERIMENT_ID = "arcsage-contact-cta-v1"
 FIELDS = {"experiment_id", "variant", "visitor_id", "event_id", "event_name", "occurred_at", "path"}
 ATTRIBUTED = ("valid_exposure", "attributed_intent")
@@ -81,8 +83,16 @@ class Config:
     max_body_bytes: int = 4096
     request_timeout: float = 10.0
     max_threads: int = 32
+    storage_backend: str = "sqlite"
+    cloud_project: str = ""
+    firestore_prefix: str = ""
+    firestore_database: str = "(default)"
 
     def __post_init__(self):
+        if self.storage_backend not in {"sqlite", "firestore"}:
+            raise ValueError("STORAGE_BACKEND must be sqlite or firestore.")
+        if self.storage_backend == "firestore":
+            validate_target(self.cloud_project, self.firestore_prefix, self.firestore_database)
         if self.report_enabled and (len(self.report_token) < 32 or len(self.report_token) > 512 or any(c.isspace() for c in self.report_token)):
             raise ValueError("Enabled reports require a secret token of at least 32 characters, without whitespace.")
 
@@ -120,10 +130,15 @@ class Config:
         threads = int(os.environ.get("MAX_THREADS", "32"))
         if not 256 <= max_bytes <= 65536 or not 1 <= timeout <= 60 or not 1 <= threads <= 256:
             raise ValueError("Event size, timeout, or thread limit is outside supported bounds.")
+        backend = os.environ.get("STORAGE_BACKEND", "sqlite")
+        if production and backend == "firestore" and os.environ.get("FIRESTORE_EMULATOR_HOST"):
+            raise ValueError("Production Firestore cannot target a local emulator.")
         db_value = os.environ.get("DB_PATH", str(Path(__file__).parent / "data" / "telemetry.sqlite3"))
         if db_value == ":memory:":
             raise ValueError("DB_PATH must be a persisted filesystem database.")
-        return cls(Path(db_value).expanduser().resolve(), origins, paths, enabled, token, max_bytes, timeout, threads)
+        return cls(Path(db_value).expanduser().resolve(), origins, paths, enabled, token, max_bytes, timeout, threads,
+                   backend, os.environ.get("GOOGLE_CLOUD_PROJECT", ""), os.environ.get("FIRESTORE_COLLECTION_PREFIX", ""),
+                   os.environ.get("FIRESTORE_DATABASE", "(default)"))
 
 
 class EventStore:
@@ -255,6 +270,13 @@ class EventStore:
             conn.close()
 
 
+def create_store(config):
+    if config.storage_backend == "firestore":
+        from firestore_store import FirestoreEventStore
+        return FirestoreEventStore(config.cloud_project, config.firestore_prefix, config.firestore_database)
+    return EventStore(config.db_path)
+
+
 class CollectorServer(ThreadingHTTPServer):
     daemon_threads = False
     block_on_close = True
@@ -350,7 +372,7 @@ class CollectorHandler(BaseHTTPRequestHandler):
             try:
                 if self.server.store.healthy():
                     return self._respond(200, {"status": "ok"})
-            except sqlite3.Error:
+            except (sqlite3.Error, StorageUnavailable):
                 pass
             return self._respond(503, {"status": "unavailable"})
         if route != "/report" or not self.server.config.report_enabled:
@@ -361,7 +383,7 @@ class CollectorHandler(BaseHTTPRequestHandler):
             return self._respond(401, {"error": "Authorization required."})
         try:
             return self._respond(200, self.server.store.report())
-        except sqlite3.Error:
+        except (sqlite3.Error, StorageUnavailable):
             return self._respond(503, {"error": "Storage temporarily unavailable."})
 
     def do_POST(self):
@@ -395,9 +417,9 @@ class CollectorHandler(BaseHTTPRequestHandler):
             return self._respond(408, {"error": "Request timed out."})
         except (UnicodeDecodeError, json.JSONDecodeError, ValidationError):
             return self._respond(400, {"error": "Invalid event payload."})
-        except EventConflict:
+        except (EventConflict, FirestoreEventConflict):
             return self._respond(409, {"error": "Event ID content conflict."})
-        except sqlite3.Error:
+        except (sqlite3.Error, StorageUnavailable):
             return self._respond(503, {"error": "Storage temporarily unavailable."})
 
 
@@ -417,7 +439,7 @@ def main():
     port = int(os.environ.get("PORT", "8767"))
     if not 1 <= port <= 65535:
         raise ValueError("PORT is outside supported bounds.")
-    server = CollectorServer((host, port), config, EventStore(config.db_path))
+    server = CollectorServer((host, port), config, create_store(config))
     def stop(signum, frame):
         threading.Thread(target=server.shutdown, daemon=True).start()
 
@@ -430,6 +452,8 @@ def main():
         pass
     finally:
         server.server_close()
+        if hasattr(server.store, "close"):
+            server.store.close()
 
 
 if __name__ == "__main__":

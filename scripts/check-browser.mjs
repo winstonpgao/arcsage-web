@@ -47,6 +47,14 @@ try{
  assert('Chinese mobile has no horizontal overflow',await b.evalJS('document.documentElement.scrollWidth <= window.innerWidth'));
  png=await b.call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});await writeFile(out+'/service-zh-mobile.png',Buffer.from(png.data,'base64'));
  await b.call('Page.navigate',{url:'http://127.0.0.1:8000/guides/real-estate-ai-lead-qualification/'});await b.wait('document.readyState==="complete" && document.querySelector(".geo-page h1")');assert('guide serves a real buyer checklist',await b.evalJS('document.querySelectorAll(".geo-page h2").length >= 4'));
+ for(const [name,route] of [['home','/'],['about','/about/']]) {
+  for(const [size,width,height] of [['desktop',1440,1000],['mobile',390,844]]) {
+   await b.call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:size==='mobile'});
+   await b.call('Page.navigate',{url:'http://127.0.0.1:8000'+route});await b.wait('document.readyState==="complete" && document.querySelector("h1")');await delay(300);
+   assert(name+' '+size+' has one visible heading and no overflow',await b.evalJS('document.querySelectorAll("h1").length===1 && document.documentElement.scrollWidth<=innerWidth && getComputedStyle(document.querySelector("h1")).opacity!=="0"'));
+   png=await b.call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});await writeFile(out+'/'+name+'-'+size+'.png',Buffer.from(png.data,'base64'));
+  }
+ }
  assert('no hydration or browser JS errors',errors.length===0);
  await new Promise(r=>{collector.once('exit',r);collector.kill('SIGTERM');});startCollector();await waitFetch('http://127.0.0.1:8767/health');const restarted=await getReport();assert('counts survive collector process restart',JSON.stringify(restarted.variants)===JSON.stringify(report.variants));
  // Verify startup retry on a route that does not itself record contact events.

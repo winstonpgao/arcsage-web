@@ -6,7 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     BIND_HOST=0.0.0.0 \
     PORT=8080 \
     REPORT_ENABLED=0
-COPY collector.py /app/collector.py
+COPY requirements.txt /app/requirements.txt
+RUN python -m pip install --no-cache-dir -r /app/requirements.txt
+COPY collector.py firestore_store.py /app/
 RUN mkdir -p /data && chown 10001:10001 /data
 USER 10001:10001
 EXPOSE 8080
