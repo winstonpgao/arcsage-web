@@ -1305,3 +1305,11 @@ a { color: inherit; text-decoration: none; }
   .about-hero__meta { flex-direction: column; gap: 8px; align-items: center; }
   .metric-card__value { font-size: 1.8rem; }
 }
+/* Contact variants share layout and content; only the primary CTA label changes. */
+.contact-discussion h2 { font-size: 2rem; line-height: 1.2; letter-spacing: -.025em; margin: 12px 0 20px; }
+.contact-discussion > p { color: var(--text-secondary); line-height: 1.7; }
+.contact-discussion ul { list-style: none; display: grid; gap: 15px; margin: 26px 0 32px; }
+.contact-discussion li { display: flex; align-items: flex-start; gap: 10px; color: var(--text-secondary); font-size: .95rem; }
+.contact-discussion li svg { flex-shrink: 0; color: var(--secondary); margin-top: 3px; }
+.contact-discussion .contact-discussion__note { margin-top: 16px; font-size: .8rem; text-align: center; }
+@media (max-width: 480px) { .contact-discussion .btn--lg { padding: 14px 12px; white-space: normal; font-size: .9rem; } }

@@ -1,0 +1,29 @@
+name: Website and experiment checks
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:static
+      - run: npm run check:public-reference
+      - run: python3 -B -m unittest discover -s experiments -p 'test_analysis.py' -q
+      - run: python3 -B -m unittest discover -s experiments/collector -p 'test_collector.py' -q
+      - run: python3 -B -m unittest discover -s experiments/collector -p 'test_firestore_store.py' -q

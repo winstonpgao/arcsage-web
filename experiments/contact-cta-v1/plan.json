@@ -1,0 +1,21 @@
+{
+  "experiment_id": "arcsage-contact-cta-v1",
+  "version": 1,
+  "measurement": "unique contact-intent visitors divided by unique exposed contact-page visitors",
+  "variant_A": "Email us",
+  "variant_B": "Discuss lead qualification",
+  "changed_factor": "primary contact CTA wording only",
+  "assignment_unit": "persistent random browser visitor ID",
+  "allocation": {"A": 0.5, "B": 0.5},
+  "baseline_rate_assumption": 0.02,
+  "minimum_detectable_absolute_change_assumption": 0.01,
+  "assumption_note": "Planning assumptions, not measured ArcSage rates. Review before public enrolment; record any change as a new experiment version.",
+  "alpha": 0.05,
+  "power_target": 0.8,
+  "minimum_exposed_visitors_per_variant": 4000,
+  "minimum_elapsed_days": 14,
+  "srm_alpha": 0.001,
+  "stopping_rule": "Collect at least the fixed per-arm target and two full weeks; do not stop based on observed outcome p-values.",
+  "outcome_limits": "A contact-intent click is not delivered email, a qualified enquiry, a sale, or increased AI search exposure.",
+  "launch_state": "not_publicly_activated"
+}

@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/write-public-reference.mjs",
     "preview": "vite preview",
-    "postbuild": "cp dist/index.html dist/404.html"
+    "test": "node --test tests/*.test.mjs",
+    "check:static": "node scripts/check-static.mjs",
+    "check:public-reference": "node scripts/check-public-reference.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.24",
