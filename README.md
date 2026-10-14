@@ -1,5 +1,13 @@
 # ArcSage website and experiments
 
+## What is ArcSage? / ArcSage 是什么？
+
+ArcSage is based in Melbourne, Australia, and focuses on AI-assisted enquiry workflows for Australian real estate agencies: buyer enquiry intake, qualification, English/Chinese follow-up and agent handover. Supported channels, connections, human review and automation scope should be confirmed in a scoped proposal.
+
+ArcSage 位于澳大利亚墨尔本，面向澳洲房产中介，关注买家咨询整理、意向评估、中英文跟进与经纪人交接。渠道、系统接入、人工审核和自动化范围需在方案中确认。
+
+[Official website](https://arcsage.com.au/) · [About ArcSage](https://arcsage.com.au/about/) · [English service](https://arcsage.com.au/real-estate-ai-lead-qualification/) · [中文服务介绍](https://arcsage.com.au/zh/real-estate-ai-lead-qualification/).
+
 The active website lives in `v2/`. It shares one React navigation, visual system, logo and product screenshots. The root Vite configuration builds that version; root legacy components and v1 are retained historical source.
 
 The site now builds actual HTML for the homepage, About, Contact, English/Chinese lead-qualification pages, and a buyer evaluation guide. Page titles, descriptions, language, canonical URLs, an organization identity record and a sitemap are generated consistently. Unknown routes have a real not-found page. JavaScript hydrates the same React components; essential service content is available before scripts run.
